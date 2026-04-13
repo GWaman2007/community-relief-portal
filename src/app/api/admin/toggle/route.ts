@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     if (!table || !id) return NextResponse.json({ error: "Missing payload" }, { status: 400 });
 
     const payload: any = { is_authorized: state };
-    if (table === 'ngos') {
+    if (table === 'ngos' || table === 'volunteers') {
       payload.status = state ? 'approved' : 'revoked';
     }
 

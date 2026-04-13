@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS public.volunteers (
     skills TEXT[] NOT NULL,
     latitude DOUBLE PRECISION NOT NULL,
     longitude DOUBLE PRECISION NOT NULL,
-    coordinates geography(POINT, 4326) NOT NULL
+    coordinates geography(POINT, 4326) NOT NULL,
+    status TEXT DEFAULT 'pending'
 );
 
 -- Index for spatial queries on volunteers
@@ -148,3 +149,4 @@ ALTER TABLE public.reports ADD COLUMN IF NOT EXISTS ngo_id UUID REFERENCES publi
 ALTER TABLE public.reports ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'critical';
 ALTER TABLE public.notifications ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending';
 ALTER TABLE public.ngos ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending';
+ALTER TABLE public.volunteers ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending';

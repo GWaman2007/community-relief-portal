@@ -28,12 +28,32 @@ export default function VolunteerDashboard() {
   if (!profile) return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">Establishing uplink...</div>;
 
   if (!profile.is_authorized) {
+    if (profile.status === 'revoked') {
+      return (
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white flex-col">
+          <h1 className="text-3xl font-black text-rose-500 tracking-tight flex items-center gap-2">⚠️ Access Revoked</h1>
+          <p className="text-slate-400 mt-2 max-w-lg text-center leading-relaxed font-medium tracking-wide">Your volunteer privileges have been explicitly suspended by the Platform Administrator. Please contact the admin directly regarding your access.</p>
+          <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="mt-8 text-rose-400 font-bold hover:underline border border-rose-500/30 px-6 py-2 rounded">Sign Out</button>
+        </div>
+      );
+    }
+
+    if (profile.status === 'ai_rejected') {
+      return (
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white flex-col">
+          <h1 className="text-3xl font-black text-orange-500 tracking-tight flex items-center gap-2">🤖 AI Screening Failed</h1>
+          <p className="text-slate-400 mt-2 max-w-lg text-center leading-relaxed font-medium tracking-wide">Our automated vetting system has flagged your profile. An administrator may still manually approve your access.</p>
+          <p className="text-slate-500 mt-4 text-xs font-mono bg-slate-800 px-4 py-2 rounded border border-slate-700">{profile.rejection_reason || "No additional details provided."}</p>
+          <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="mt-8 text-orange-400 font-bold hover:underline border border-orange-500/30 px-6 py-2 rounded">Sign Out</button>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white flex-col">
-        <h1 className="text-3xl font-black text-rose-500 tracking-tight flex items-center gap-2">⚠️ Access Revoked</h1>
-        <p className="text-slate-400 mt-2 max-w-lg text-center leading-relaxed">Your volunteer privileges have been suspended by the Platform Administrator.</p>
-        <p className="text-slate-500 mt-4 text-xs font-mono">{profile.rejection_reason || "Check your email for further instructions."}</p>
-        <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="mt-8 text-rose-400 font-bold hover:underline border border-rose-500/30 px-6 py-2 rounded">Release Token</button>
+        <h1 className="text-3xl font-black text-amber-500 tracking-tight flex items-center gap-2">⏳ AI Review In Progress</h1>
+        <p className="text-slate-400 mt-2 max-w-lg text-center leading-relaxed font-medium tracking-wide">Our AI screening system is currently reviewing your volunteer profile. This process is usually instant — please refresh in a few seconds.</p>
+        <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="mt-8 text-amber-500/70 font-bold hover:text-amber-400 hover:underline border border-amber-500/30 px-6 py-2 rounded transition-colors">Return to Root</button>
       </div>
     );
   }

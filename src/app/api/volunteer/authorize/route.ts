@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     // Update the record natively
     await supabase.from("volunteers").update({
       is_authorized,
+      status: is_authorized ? 'approved' : 'ai_rejected',
       rejection_reason: is_authorized ? null : rejection_reason
     }).eq("id", id);
 
