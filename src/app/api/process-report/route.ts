@@ -25,6 +25,39 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    // MULTIMODAL AI GATEKEEPER
+    if (image_base64) {
+      const match = image_base64.match(/^data:(image\/[a-zA-Z+.-]+);base64,(.*)$/);
+      if (match) {
+        const gkPrompt = `You are a strict crisis data moderator for a disaster relief platform. The user reported an incident with the description '${text}'. Look at the provided image. Does this image realistically depict or relate to the described crisis? Be strict. Reject stock photos of unrelated items, memes, or junk data. Output strict JSON: { "is_valid": boolean, "rejection_reason": "short explanation to show the user" }`;
+
+        const gkPayload = {
+          contents: [{ parts: [{ text: gkPrompt }, { inlineData: { mimeType: match[1], data: match[2] } }] }],
+          generationConfig: { responseMimeType: "application/json" }
+        };
+
+        const gkRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${GEMINI_API_KEY}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(gkPayload)
+        });
+
+        if (gkRes.ok) {
+          const gkData = await gkRes.json();
+          let gkRaw = gkData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+          gkRaw = gkRaw.replace(/```json/g, "").replace(/```/g, "").trim();
+          try {
+            const analysis = JSON.parse(gkRaw);
+            if (analysis.is_valid === false) {
+              return NextResponse.json({ error: `AI Moderation Failed: ${analysis.rejection_reason || "Junk image detected."}` }, { status: 400 });
+            }
+          } catch (e) {
+             console.error("Gatekeeper parse failed", e);
+          }
+        }
+      }
+    }
+
     // 1. Get nearby reports using Supabase RPC
     const { data: nearbyReports, error: rpcError } = await supabase.rpc("get_nearby_reports", {
       lat: latitude,
