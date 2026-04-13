@@ -10,10 +10,23 @@ const supabase = createClient(
 
 export async function POST(req: Request) {
   try {
-    const { id, name, skills } = await req.json();
+    // 1. MERGE FIX: Extracted 'email' from the request
+    const { id, name, email, skills } = await req.json();
     if (!id || !name || !skills) return NextResponse.json({ error: "Missing identity" }, { status: 400 });
 
-    const prompt = `You are an automated HR screener for a disaster relief platform. A user just registered with the name '${name}' and these skills: [${skills.join(', ')}]. Evaluate if this looks like a legitimate volunteer profile or spam/malicious data. Output strict JSON: { "authorized": boolean, "reason": "short explanation" }.`;
+    // 2. MERGE FIX: Updated the prompt with the strict Trust & Safety rules and the user's email
+    const prompt = `You are a strict Trust & Safety HR screener for an emergency disaster relief platform. 
+    A user just registered with:
+    - Name: '${name}'
+    - Email: '${email || "Not provided"}'
+    - Skills: [${skills.join(', ')}]. 
+    
+    RULES:
+    1. FLAG as unauthorized if the name or email contains inappropriate, explicit, offensive, or obvious joke/troll content (e.g., "soggyballs", fake joke names).
+    2. FLAG as unauthorized if the skills are dangerously conflicting or highly improbable.
+    3. APPROVE if it looks like a normal, legitimate volunteer.
+    
+    Evaluate this profile. Output strict JSON: { "authorized": boolean, "reason": "short explanation" }.`;
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -25,8 +38,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Gemini Key missing" }, { status: 500 });
     }
 
+    // Keeping Antigravity's optimized REST fetch endpoint
     const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${apiKey}`;
-    
+
     let is_authorized = false;
     let rejection_reason = "System Error: AI evaluation timed out or failed. Manual review required.";
 
@@ -43,9 +57,11 @@ export async function POST(req: Request) {
       const aiData = await aiReq.json();
       const rawText = aiData.candidates[0].content.parts[0].text;
       const parsed = JSON.parse(rawText);
+
+      // Antigravity's clean JSON mapping
       is_authorized = parsed.authorized;
       rejection_reason = parsed.reason || "";
-    } catch(e) {
+    } catch (e) {
       console.error("Gemini AI call failed:", e);
     }
 
