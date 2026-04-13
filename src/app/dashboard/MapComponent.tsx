@@ -133,7 +133,7 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
         </select>
       </div>
 
-      <MapContainer center={[20, 0]} zoom={2} attributionControl={false} style={{ height: "100%", width: "100%" }} className="bg-slate-900 rounded-lg">
+      <MapContainer center={[19.0760, 72.8777]} zoom={10} attributionControl={false} style={{ height: "100%", width: "100%" }} className="bg-slate-900 rounded-lg">
         <TileLayer url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png" />
         <MarkerClusterGroup chunkedLoading>
           {reports.map(report => {
@@ -142,7 +142,7 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
 
             return (
               <Marker key={report.id} position={[report.latitude, report.longitude]} icon={getIcon(report.status)}>
-                <Popup className="custom-popup leaflet-popup-override">
+                <Popup autoPan={false} className="custom-popup leaflet-popup-override">
                   <div className="p-3 pt-5 w-64 bg-white rounded-lg pointer-events-auto">
                     <div className="flex justify-between items-start border-b border-slate-200 pb-2 mb-2">
                       <span className="font-bold text-slate-800 uppercase tracking-widest text-[9px] bg-slate-100 px-2 py-1 rounded shadow-sm border border-slate-200">
