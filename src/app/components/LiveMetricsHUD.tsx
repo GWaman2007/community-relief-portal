@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { AlertTriangle, Truck, CheckCircle } from "lucide-react";
 
 export default function LiveMetricsHUD() {
   const [metrics, setMetrics] = useState({ active: 0, dispatched: 0, resolved: 0 });
@@ -27,18 +28,29 @@ export default function LiveMetricsHUD() {
   }, []);
 
   return (
-    <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6 z-10 relative">
-      <div className="bg-background/50 border border-border/50 border-b-4 border-b-rose-500 p-4 rounded-xl shadow-lg text-center backdrop-blur-sm">
-        <h3 className="text-rose-500 text-[10px] md:text-xs font-black uppercase tracking-widest mb-1">Active Crises</h3>
-        <span className="text-3xl md:text-5xl font-black text-rose-100">{metrics.active}</span>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2 z-10 relative">
+      <div className="bg-card/60 border border-border/50 border-b-4 border-b-rose-500 p-5 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center backdrop-blur-md flex flex-col items-center justify-center group">
+        <div className="flex items-center gap-1.5 mb-2 opacity-80 group-hover:opacity-100 transition-opacity">
+          <AlertTriangle className="w-4 h-4 text-rose-500" />
+          <h3 className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">Active Crises</h3>
+        </div>
+        <span className="text-4xl md:text-5xl font-extrabold text-foreground drop-shadow-sm">{metrics.active}</span>
       </div>
-      <div className="bg-background/50 border border-border/50 border-b-4 border-b-amber-500 p-4 rounded-xl shadow-lg text-center backdrop-blur-sm">
-        <h3 className="text-amber-500 text-[10px] md:text-xs font-black uppercase tracking-widest mb-1">Dispatched</h3>
-        <span className="text-3xl md:text-5xl font-black text-amber-100">{metrics.dispatched}</span>
+      
+      <div className="bg-card/60 border border-border/50 border-b-4 border-b-amber-500 p-5 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center backdrop-blur-md flex flex-col items-center justify-center group">
+        <div className="flex items-center gap-1.5 mb-2 opacity-80 group-hover:opacity-100 transition-opacity">
+          <Truck className="w-4 h-4 text-amber-500" />
+          <h3 className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">Dispatched</h3>
+        </div>
+        <span className="text-4xl md:text-5xl font-extrabold text-foreground drop-shadow-sm">{metrics.dispatched}</span>
       </div>
-      <div className="bg-background/50 border border-border/50 border-b-4 border-b-emerald-500 p-4 rounded-xl shadow-lg text-center backdrop-blur-sm">
-        <h3 className="text-emerald-500 text-[10px] md:text-xs font-black uppercase tracking-widest mb-1">Resolved</h3>
-        <span className="text-3xl md:text-5xl font-black text-emerald-100">{metrics.resolved}</span>
+      
+      <div className="bg-card/60 border border-border/50 border-b-4 border-b-teal-500 p-5 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center backdrop-blur-md flex flex-col items-center justify-center group">
+        <div className="flex items-center gap-1.5 mb-2 opacity-80 group-hover:opacity-100 transition-opacity">
+          <CheckCircle className="w-4 h-4 text-teal-500" />
+          <h3 className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">Resolved</h3>
+        </div>
+        <span className="text-4xl md:text-5xl font-extrabold text-foreground drop-shadow-sm">{metrics.resolved}</span>
       </div>
     </div>
   );

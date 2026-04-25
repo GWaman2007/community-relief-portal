@@ -44,117 +44,151 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="flex-1 flex flex-col items-center pt-32 pb-16 px-6 z-10 relative">
-        <div className="max-w-5xl w-full">
+      <main className="flex-1 flex flex-col items-center pt-32 pb-24 px-6 z-10 relative">
+        <div className="max-w-6xl w-full">
           
-          {/* Hero Section */}
+          {/* Typographic & Glassmorphic Hero Section */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-center mb-16 mt-8"
+            className="text-center mb-24 flex flex-col items-center"
           >
-            <Badge variant="outline" className="mb-6 py-1.5 px-4 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-sm font-medium tracking-wide rounded-full">
+            {/* Visual Anchor: Icon-driven Network Abstraction */}
+            <div className="relative w-48 h-48 mb-10 flex items-center justify-center">
+              {/* Outer Pulse Ring */}
+              <div className="absolute inset-0 bg-primary/5 rounded-full animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]" />
+              <div className="absolute inset-4 bg-primary/10 rounded-full animate-pulse" />
+              
+              {/* Central Hub */}
+              <div className="absolute w-20 h-20 bg-card/80 backdrop-blur-md border border-border/50 rounded-full flex items-center justify-center shadow-xl z-20">
+                <ShieldAlert className="w-8 h-8 text-primary" />
+              </div>
+
+              {/* Connected Nodes */}
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute inset-0 z-10">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
+                  <Users className="w-4 h-4 text-primary/80" />
+                </div>
+                <div className="absolute bottom-6 right-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
+                  <MapPin className="w-4 h-4 text-primary/80" />
+                </div>
+                <div className="absolute bottom-6 left-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
+                  <DatabaseZap className="w-4 h-4 text-primary/80" />
+                </div>
+              </motion.div>
+            </div>
+
+            <Badge variant="outline" className="mb-6 py-1.5 px-4 bg-primary/10 text-primary border-primary/20 text-sm font-medium tracking-wide rounded-full shadow-sm">
               <Activity className="w-4 h-4 mr-2 inline" />
               Live Relief Efforts
             </Badge>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-foreground">
-              Community <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-transparent bg-clip-text">Relief Portal</span>
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 text-foreground max-w-4xl mx-auto leading-tight">
+              Community <span className="text-primary">Relief Portal</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
-              Our decentralized relief efforts architecture leverages real-time AI modeling to deduplicate field reports and securely triangulate skilled community volunteers.
+            <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto font-medium leading-relaxed">
+              We connect verified NGOs directly with skilled community volunteers to transform chaotic disaster responses into organized, efficient relief efforts.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/register">
-                <Button size="lg" className="rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 font-bold h-12 shadow-xl shadow-foreground/10 transition-all hover:scale-105">
-                  Register as Volunteer <ArrowRight className="ml-2 w-4 h-4" />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto">
+              <Link href="/register" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-14 shadow-lg shadow-primary/20 transition-all hover:scale-105 text-lg">
+                  Register as Volunteer <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Link href="/dashboard">
-                <Button size="lg" variant="outline" className="rounded-full px-8 h-12 font-bold bg-background/50 backdrop-blur-sm border-border/50 hover:bg-accent/50 transition-all">
+              <Link href="#live-map" className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" className="w-full rounded-full px-8 h-14 font-bold bg-card/40 backdrop-blur-sm border-border hover:bg-card/80 transition-all text-lg">
                   View Live Map
                 </Button>
               </Link>
             </div>
           </motion.div>
 
-          {/* Quick Stats Grid */}
+          {/* Persuasive About Us Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="mb-24"
           >
-            <Card className="bg-card/40 backdrop-blur-sm border-border/50 shadow-lg hover:shadow-emerald-500/5 transition-all hover:-translate-y-1">
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400">
-                  <DatabaseZap className="w-6 h-6" />
+            <div className="text-center mb-14">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Why Join EarthNode?</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+                By harnessing the power of collective intelligence and real-time mapping, we empower communities to rebuild faster and safer.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="bg-card/60 backdrop-blur-xl border border-border/50 shadow-xl shadow-background/5 p-8 transition-transform hover:-translate-y-1">
+                <div className="bg-primary/10 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <DatabaseZap className="text-primary w-7 h-7" />
                 </div>
-                <div>
-                  <div className="text-2xl font-bold">AI Deduplication</div>
-                  <div className="text-sm text-muted-foreground">Real-time signal filtering</div>
+                <h3 className="text-xl font-bold mb-3 text-foreground">AI Deduplication</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Our system instantly cross-references incoming field reports, stripping out duplicate noise so relief coordinators can focus on verified crises.
+                </p>
+              </Card>
+
+              <Card className="bg-card/60 backdrop-blur-xl border border-border/50 shadow-xl shadow-background/5 p-8 transition-transform hover:-translate-y-1">
+                <div className="bg-primary/10 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <MapPin className="text-primary w-7 h-7" />
                 </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/40 backdrop-blur-sm border-border/50 shadow-lg hover:shadow-cyan-500/5 transition-all hover:-translate-y-1">
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400">
-                  <MapPin className="w-6 h-6" />
+                <h3 className="text-xl font-bold mb-3 text-foreground">Real-Time Crisis Mapping</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Submit field reports instantly. Our platform maps out critical zones in real-time, providing a unified picture of the situation on the ground.
+                </p>
+              </Card>
+
+              <Card className="bg-card/60 backdrop-blur-xl border border-border/50 shadow-xl shadow-background/5 p-8 transition-transform hover:-translate-y-1">
+                <div className="bg-primary/10 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+                  <Users className="text-primary w-7 h-7" />
                 </div>
-                <div>
-                  <div className="text-2xl font-bold">Geo-Triangulation</div>
-                  <div className="text-sm text-muted-foreground">Precise incident mapping</div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/40 backdrop-blur-sm border-border/50 shadow-lg hover:shadow-indigo-500/5 transition-all hover:-translate-y-1">
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400">
-                  <Users className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">Multi-Tenant RBAC</div>
-                  <div className="text-sm text-muted-foreground">Secure volunteer dispatch</div>
-                </div>
-              </CardContent>
-            </Card>
+                <h3 className="text-xl font-bold mb-3 text-foreground">Secure Routing</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Volunteers are securely dispatched only to zones where their specific skills are needed, ensuring safety and maximizing community impact.
+                </p>
+              </Card>
+            </div>
           </motion.div>
 
           {/* Map Display Card */}
           <motion.div
+            id="live-map"
             initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <Card className="overflow-hidden border-border/50 bg-card/40 backdrop-blur-xl shadow-2xl shadow-emerald-900/10">
-              <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
+            <Card className="overflow-hidden border border-border/50 bg-card/60 backdrop-blur-2xl shadow-2xl">
+              <CardHeader className="border-b border-border/40 bg-card/40 pb-5 pt-6 px-8">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                   <div>
-                    <CardTitle className="text-xl flex items-center gap-2">
-                      <span className="relative flex h-3 w-3 mr-1">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    <CardTitle className="text-2xl font-bold flex items-center gap-3 text-foreground">
+                      <span className="relative flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
                       </span>
                       Live Crisis Map
                     </CardTitle>
-                    <CardDescription className="mt-1.5">
+                    <CardDescription className="mt-2 text-base">
                       Real-time updates from active crisis zones.
                     </CardDescription>
                   </div>
-                  <Badge variant="destructive" className="bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20 w-fit">
+                  <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 px-4 py-1.5 text-sm font-semibold rounded-full">
                     Live Feed
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="p-4 border-b border-border/40 bg-background/30">
+                <div className="p-6 border-b border-border/40 bg-background/40">
                   <LiveMetricsHUD />
                 </div>
-                <div className="h-[500px] w-full opacity-90 relative">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/20 pointer-events-none z-10" />
+                <div className="h-[600px] w-full relative">
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10 pointer-events-none z-10" />
+                  {/* DO NOT TOUCH MAP COMPONENT EXISTING LOGIC */}
                   <MapComponent filterNode="All" />
                 </div>
               </CardContent>

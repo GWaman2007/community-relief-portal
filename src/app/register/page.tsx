@@ -153,10 +153,10 @@ export default function RegisterPage() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="w-full max-w-xl z-10 py-12"
       >
-        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl shadow-emerald-900/10">
+        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <CardHeader className="text-center space-y-2 pt-8">
-            <div className="mx-auto bg-emerald-500/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
-              <ShieldAlert className="w-6 h-6 text-emerald-500" />
+            <div className="mx-auto bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+              <ShieldAlert className="w-6 h-6 text-primary" />
             </div>
             <CardTitle className="text-3xl font-bold tracking-tight">Register</CardTitle>
             <CardDescription className="text-base">
@@ -166,7 +166,7 @@ export default function RegisterPage() {
           <CardContent className="pt-4">
             <form onSubmit={handleSubmit} className="space-y-5">
               {status && (
-                <div className={`p-3 rounded-md text-sm font-medium border ${status.type === 'error' ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`}>
+                <div className={`p-3 rounded-md text-sm font-medium border ${status.type === 'error' ? 'bg-destructive/10 border-destructive/20 text-destructive' : 'bg-primary/10 border-primary/20 text-primary'}`}>
                   {status.msg}
                 </div>
               )}
@@ -175,7 +175,7 @@ export default function RegisterPage() {
                 <Button 
                   type="button" 
                   variant={role === "volunteer" ? "default" : "ghost"}
-                  className={`flex-1 ${role === "volunteer" ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md" : "text-muted-foreground"}`}
+                  className={`flex-1 ${role === "volunteer" ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-md" : "text-muted-foreground"}`}
                   onClick={() => setRole("volunteer")}
                 >
                   Field Volunteer
@@ -183,7 +183,7 @@ export default function RegisterPage() {
                 <Button 
                   type="button" 
                   variant={role === "ngo" ? "default" : "ghost"}
-                  className={`flex-1 ${role === "ngo" ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md" : "text-muted-foreground"}`}
+                  className={`flex-1 ${role === "ngo" ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-md" : "text-muted-foreground"}`}
                   onClick={() => setRole("ngo")}
                 >
                   NGO Contributor
@@ -193,15 +193,15 @@ export default function RegisterPage() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name / Organization Name</Label>
-                  <Input id="name" type="text" required value={name} onChange={e=>setName(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
+                  <Input id="name" type="text" required value={name} onChange={e=>setName(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-primary" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" required value={email} onChange={e=>setEmail(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
+                  <Input id="email" type="email" required value={email} onChange={e=>setEmail(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-primary" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Passkey (Min 6 Characters)</Label>
-                  <Input id="password" type="password" required minLength={6} value={password} onChange={e=>setPassword(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
+                  <Input id="password" type="password" required minLength={6} value={password} onChange={e=>setPassword(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-primary" />
                 </div>
               </div>
 
@@ -209,7 +209,7 @@ export default function RegisterPage() {
                 <div className="border-t border-border/40 pt-6 mt-6 space-y-6">
                   <div className="bg-background/30 p-4 rounded-xl border border-border/50 space-y-4">
                     <div>
-                      <Label className="flex items-center gap-2 mb-2 text-emerald-400">
+                      <Label className="flex items-center gap-2 mb-2 text-primary">
                         <MapPin className="w-4 h-4" /> Location (Required)
                       </Label>
                       <Button type="button" onClick={getLocation} variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-accent/50">
@@ -225,10 +225,10 @@ export default function RegisterPage() {
                           value={manualAddress} 
                           onKeyDown={e => e.key === 'Enter' && searchAddress(e)} 
                           onChange={e => setManualAddress(e.target.value)} 
-                          className="bg-background/50 border-border/50 focus-visible:ring-emerald-500 pr-10" 
+                          className="bg-background/50 border-border/50 focus-visible:ring-primary pr-10" 
                         />
                       </div>
-                      <Button type="button" onClick={searchAddress} size="icon" className="bg-emerald-600 hover:bg-emerald-500 text-white shrink-0">
+                      <Button type="button" onClick={searchAddress} size="icon" className="bg-primary hover:bg-primary/90 text-primary-foreground shrink-0">
                         <Search className="w-4 h-4" />
                       </Button>
                     </div>
@@ -244,7 +244,7 @@ export default function RegisterPage() {
                             type="checkbox" 
                             checked={selectedSkills.includes(skill)} 
                             onChange={() => handleSkillToggle(skill)} 
-                            className="rounded bg-background border-border/50 text-emerald-600 focus:ring-emerald-500 w-4 h-4" 
+                            className="rounded bg-background border-border/50 text-primary focus:ring-primary w-4 h-4" 
                           />
                           <span className="font-normal">{skill}</span>
                         </Label>
@@ -257,7 +257,7 @@ export default function RegisterPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 mt-4 transition-all"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-11 mt-4 transition-all"
               >
                 {isSubmitting ? "Registering..." : "Register"}
               </Button>
@@ -265,7 +265,7 @@ export default function RegisterPage() {
           </CardContent>
           <CardFooter className="justify-center border-t border-border/40 py-6">
             <div className="text-sm text-muted-foreground">
-              Already have an account? <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Sign In</Link>
+              Already have an account? <Link href="/login" className="text-primary hover:text-primary/80 font-semibold transition-colors">Sign In</Link>
             </div>
           </CardFooter>
         </Card>

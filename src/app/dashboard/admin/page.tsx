@@ -108,11 +108,11 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="col-span-1 lg:col-span-2 bg-card/60 backdrop-blur-xl border-border/50 shadow-xl overflow-hidden flex flex-col">
             <CardHeader className="pb-4 flex flex-row items-center justify-between border-b border-border/50 bg-background/50">
-              <CardTitle className="text-emerald-400">Live Global Heatmap</CardTitle>
+              <CardTitle className="text-primary">Live Global Heatmap</CardTitle>
               <select 
                 value={filterNode} 
                 onChange={(e) => setFilterNode(e.target.value)}
-                className="bg-background text-foreground border border-border/50 rounded-lg px-3 py-1.5 text-xs font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                className="bg-background text-foreground border border-border/50 rounded-lg px-3 py-1.5 text-xs font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
               >
                 {SEMANTIC_NODES.map(node => (
                   <option key={node} value={node}>{node === "All" ? "🌍 Global Feed" : node}</option>
@@ -130,9 +130,9 @@ export default function AdminDashboard() {
           </Card>
 
           <div className="space-y-6">
-            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-xl h-96 overflow-y-auto">
+            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-96 overflow-y-auto">
               <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
-                <CardTitle className="text-cyan-400">NGO Trust Architecture</CardTitle>
+                <CardTitle className="text-primary">NGO Trust Architecture</CardTitle>
               </CardHeader>
               <CardContent className="p-4">
                 <table className="w-full text-left border-collapse table-fixed">
@@ -148,8 +148,8 @@ export default function AdminDashboard() {
                       ngos.map((ngo: any) => (
                         <tr key={ngo.id} className="border-t border-border/50">
                           <td className="p-3 overflow-hidden">
-                            <span className={`font-medium text-sm whitespace-nowrap block text-ellipsis overflow-hidden ${ngo.is_authorized ? 'text-emerald-400' : 'text-foreground'}`}>{ngo.name}</span>
-                            <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 mt-1 inline-block rounded ${ngo.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{ngo.is_authorized ? "Trusted System" : "Pending Validation"}</span>
+                            <span className={`font-medium text-sm whitespace-nowrap block text-ellipsis overflow-hidden ${ngo.is_authorized ? 'text-primary' : 'text-foreground'}`}>{ngo.name}</span>
+                            <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 mt-1 inline-block rounded ${ngo.is_authorized ? 'bg-primary/10 text-primary' : 'bg-muted border border-border text-muted-foreground'}`}>{ngo.is_authorized ? "Trusted System" : "Pending Validation"}</span>
                           </td>
                           <td className="p-3 text-muted-foreground text-xs text-ellipsis overflow-hidden whitespace-nowrap">{ngo.email}</td>
                           <td className="p-3 align-middle text-right">
@@ -164,14 +164,14 @@ export default function AdminDashboard() {
                                   });
                                   setNgos(prev => prev.map(n => n.id === ngo.id ? { ...n, is_authorized: false } : n));
                                 }}
-                                className="w-full max-w-[100px] bg-rose-900/30 hover:bg-rose-900 border border-rose-500/50 text-rose-500 hover:text-white px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all"
+                                className="w-full max-w-[100px] bg-destructive/10 hover:bg-destructive border border-destructive/20 text-destructive hover:text-destructive-foreground px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all"
                               >
                                 Revoke
                               </button>
                             ) : (
                               <button 
                                 onClick={() => toggleAuth("ngos", ngo.id, ngo.is_authorized)}
-                                className="w-full max-w-[100px] bg-cyan-900/40 hover:bg-cyan-800 border border-cyan-500/50 text-cyan-400 hover:text-white px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all shadow-[0_0_10px_rgba(34,211,238,0.2)]"
+                                className="w-full max-w-[100px] bg-primary/10 hover:bg-primary border border-primary/20 text-primary hover:text-primary-foreground px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all shadow-sm"
                               >
                                 Authorize
                               </button>
@@ -185,23 +185,23 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-xl h-96 overflow-y-auto">
+            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-96 overflow-y-auto">
               <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
-                <CardTitle className="text-blue-400">AI Volunteer Verification</CardTitle>
+                <CardTitle className="text-primary">AI Volunteer Verification</CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-3">
                 {volunteers.map(v => (
                   <div key={v.id} className="bg-background/50 border border-border/50 p-3 rounded-xl flex items-center justify-between shadow-sm">
                     <div>
                       <h3 className="font-semibold text-sm flex items-center gap-1">{v.name}</h3>
-                      {v.rejection_reason && <p className="text-xs text-rose-400 leading-tight my-1">AI Output: {v.rejection_reason}</p>}
-                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 mt-1 inline-block rounded ${v.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{v.is_authorized ? "Verified" : "Flagged"}</span>
+                      {v.rejection_reason && <p className="text-xs text-destructive leading-tight my-1">AI Output: {v.rejection_reason}</p>}
+                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 mt-1 inline-block rounded ${v.is_authorized ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'}`}>{v.is_authorized ? "Verified" : "Flagged"}</span>
                     </div>
                     <Button 
                       variant="outline" 
                       size="sm"
                       onClick={() => toggleAuth("volunteers", v.id, v.is_authorized)} 
-                      className={`text-xs font-bold border-border/50 ${v.is_authorized ? 'hover:bg-rose-900/30 text-rose-400' : 'hover:bg-emerald-900/30 text-emerald-400'}`}
+                      className={`text-xs font-bold border-border/50 ${v.is_authorized ? 'hover:bg-destructive/10 text-destructive' : 'hover:bg-primary/10 text-primary'}`}
                     >
                       {v.is_authorized ? "Ban" : "Approve"}
                     </Button>
