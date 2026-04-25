@@ -37,7 +37,7 @@ export default function Home() {
             </Link>
             <Link href="/register">
               <Button className="font-semibold shadow-lg shadow-emerald-500/20 bg-emerald-600 hover:bg-emerald-500 text-white border-0">
-                Register Node
+                Register
               </Button>
             </Link>
           </div>
@@ -56,7 +56,7 @@ export default function Home() {
           >
             <Badge variant="outline" className="mb-6 py-1.5 px-4 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-sm font-medium tracking-wide rounded-full">
               <Activity className="w-4 h-4 mr-2 inline" />
-              Live Deployment Protocol Active
+              Live Disaster Response
             </Badge>
             
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-foreground">
@@ -70,12 +70,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/register">
                 <Button size="lg" className="rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 font-bold h-12 shadow-xl shadow-foreground/10 transition-all hover:scale-105">
-                  Deploy Volunteer Node <ArrowRight className="ml-2 w-4 h-4" />
+                  Register as Volunteer <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/dashboard">
                 <Button size="lg" variant="outline" className="rounded-full px-8 h-12 font-bold bg-background/50 backdrop-blur-sm border-border/50 hover:bg-accent/50 transition-all">
-                  View Live Intel
+                  View Live Map
                 </Button>
               </Link>
             </div>
@@ -117,7 +117,7 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="text-2xl font-bold">Multi-Tenant RBAC</div>
-                  <div className="text-sm text-muted-foreground">Secure dispatch protocols</div>
+                  <div className="text-sm text-muted-foreground">Secure volunteer dispatch</div>
                 </div>
               </CardContent>
             </Card>
@@ -138,14 +138,14 @@ export default function Home() {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                       </span>
-                      Live Crisis Map Array
+                      Live Crisis Map
                     </CardTitle>
                     <CardDescription className="mt-1.5">
-                      Real-time telemetry from active operational zones.
+                      Real-time updates from active crisis zones.
                     </CardDescription>
                   </div>
                   <Badge variant="destructive" className="bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20 w-fit">
-                    Read-Only Uplink
+                    Live Feed
                   </Badge>
                 </div>
               </CardHeader>
@@ -166,7 +166,7 @@ export default function Home() {
       
       {/* Footer */}
       <footer className="w-full border-t border-border/40 py-8 text-center text-sm text-muted-foreground z-10 bg-background/80 backdrop-blur-lg">
-        <p>EarthNode © 2026. Decentralized Disaster Response Protocol.</p>
+        <p>EarthNode © 2026. Community Disaster Response Platform.</p>
       </footer>
     </div>
   );

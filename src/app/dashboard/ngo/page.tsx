@@ -52,7 +52,7 @@ export default function NgoDashboard() {
         </div>
         <Card className="bg-card/60 backdrop-blur-xl border-amber-500/20 shadow-2xl z-10 max-w-lg w-full text-center py-10 px-6">
           <h1 className="text-3xl font-black text-amber-500 tracking-tight flex items-center justify-center gap-2 mb-4">⏳ Pending Approval</h1>
-          <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-8">Your NGO credentials are currently under review by Central Command. Your dashboard will unlock once you receive global operational clearance.</p>
+          <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-8">Your NGO credentials are currently under review by the Administrator. Your dashboard will unlock once you receive approval.</p>
           <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-amber-500 hover:text-amber-400 border-amber-500/30 hover:bg-amber-500/10">Return to Hub</Button>
         </Card>
       </div>
@@ -82,7 +82,7 @@ export default function NgoDashboard() {
               <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
                 NGO Operations Center
               </h1>
-              <p className="text-sm text-muted-foreground">Authorized Entity Command</p>
+              <p className="text-sm text-muted-foreground">Authorized NGO Dashboard</p>
             </div>
           </div>
           <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="bg-background/50 border-border/50 text-muted-foreground hover:text-foreground">Logout</Button>
@@ -106,7 +106,7 @@ export default function NgoDashboard() {
                  <Plus className="w-12 h-12" />
                </div>
                <h2 className="text-foreground font-black text-2xl mb-2">Deploy Scenario</h2>
-               <p className="text-muted-foreground text-sm mb-8 leading-relaxed">Submit verified field data to the AI deduplication pipeline to synchronize response nodes.</p>
+               <p className="text-muted-foreground text-sm mb-8 leading-relaxed">Submit verified field reports to the system.</p>
                <Button onClick={() => router.push("/report")} size="lg" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all">
                  Launch Field Report
                </Button>

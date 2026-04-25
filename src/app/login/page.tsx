@@ -68,9 +68,9 @@ export default function LoginPage() {
             <div className="mx-auto bg-emerald-500/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
               <ShieldAlert className="w-6 h-6 text-emerald-500" />
             </div>
-            <CardTitle className="text-3xl font-bold tracking-tight">Access Node</CardTitle>
+            <CardTitle className="text-3xl font-bold tracking-tight">Login</CardTitle>
             <CardDescription className="text-base">
-              Authenticate to enter your operational dashboard
+              Sign in to your dashboard
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-4">
@@ -81,7 +81,7 @@ export default function LoginPage() {
                 </div>
               )}
               <div className="space-y-2">
-                <Label htmlFor="email">Encrypted Uplink (Email)</Label>
+                <Label htmlFor="email">Email Address</Label>
                 <Input 
                   id="email"
                   type="email" 
@@ -89,7 +89,7 @@ export default function LoginPage() {
                   value={email} 
                   onChange={e=>setEmail(e.target.value)} 
                   className="bg-background/50 border-border/50 focus-visible:ring-emerald-500"
-                  placeholder="agent@earthnode.org"
+                  placeholder="user@example.com"
                 />
               </div>
               <div className="space-y-2">
@@ -110,13 +110,13 @@ export default function LoginPage() {
                 disabled={isSubmitting} 
                 className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 mt-4 transition-all"
               >
-                {isSubmitting ? "Authenticating..." : "Initialize Uplink"}
+                {isSubmitting ? "Authenticating..." : "Sign In"}
               </Button>
             </form>
           </CardContent>
           <CardFooter className="justify-center border-t border-border/40 py-6">
             <div className="text-sm text-muted-foreground">
-              Unregistered entity? <Link href="/register" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Deploy Node</Link>
+              Need an account? <Link href="/register" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Register</Link>
             </div>
           </CardFooter>
         </Card>

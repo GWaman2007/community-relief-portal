@@ -29,7 +29,7 @@ export default function VolunteerDashboard() {
     checkAuth();
   }, [router]);
 
-  if (!profile) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground">Establishing uplink...</div>;
+  if (!profile) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground">Loading profile...</div>;
 
   if (!profile.is_authorized) {
     if (profile.status === 'revoked') {

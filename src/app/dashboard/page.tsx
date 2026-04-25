@@ -48,7 +48,7 @@ export default function DashboardPage() {
             <div>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight flex items-center gap-2">
                 <MapIcon className="w-6 h-6 text-emerald-500" />
-                AI Deduplication Array
+                AI Deduplication Engine
               </h1>
               <p className="text-sm text-muted-foreground">Real-time NGO field reports visualization</p>
             </div>

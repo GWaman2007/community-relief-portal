@@ -214,7 +214,7 @@ export default function FieldPortal() {
               <div className="bg-background/30 p-4 rounded-xl border border-border/50 space-y-4">
                 <div>
                   <Label className="flex items-center gap-2 mb-2 text-cyan-400">
-                    <MapPin className="w-4 h-4" /> Operational Coordinates (Required)
+                    <MapPin className="w-4 h-4" /> Location (Required)
                   </Label>
                   <Button type="button" onClick={getLocation} variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-accent/50 text-foreground">
                     Acquire GPS Signal

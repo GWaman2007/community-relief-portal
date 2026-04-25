@@ -120,7 +120,7 @@ export default function RegisterPage() {
         if (!res.ok) throw new Error(regData.error);
       } catch (err: any) {
         setIsSubmitting(false);
-        return setStatus({ type: 'error', msg: err?.message || "Failed to establish designated NGO node." });
+        return setStatus({ type: 'error', msg: err?.message || "Failed to register NGO account." });
       }
     }
 
@@ -158,9 +158,9 @@ export default function RegisterPage() {
             <div className="mx-auto bg-emerald-500/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
               <ShieldAlert className="w-6 h-6 text-emerald-500" />
             </div>
-            <CardTitle className="text-3xl font-bold tracking-tight">Deploy Node</CardTitle>
+            <CardTitle className="text-3xl font-bold tracking-tight">Register</CardTitle>
             <CardDescription className="text-base">
-              Register your operational entity on the EarthNode network
+              Register to help with disaster response efforts
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-4">
@@ -192,11 +192,11 @@ export default function RegisterPage() {
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Entity Designation (Full Name / Org Name)</Label>
+                  <Label htmlFor="name">Full Name / Organization Name</Label>
                   <Input id="name" type="text" required value={name} onChange={e=>setName(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Encrypted Uplink (Email Address)</Label>
+                  <Label htmlFor="email">Email Address</Label>
                   <Input id="email" type="email" required value={email} onChange={e=>setEmail(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
                 </div>
                 <div className="space-y-2">
@@ -210,7 +210,7 @@ export default function RegisterPage() {
                   <div className="bg-background/30 p-4 rounded-xl border border-border/50 space-y-4">
                     <div>
                       <Label className="flex items-center gap-2 mb-2 text-emerald-400">
-                        <MapPin className="w-4 h-4" /> Operational Coordinates (Required)
+                        <MapPin className="w-4 h-4" /> Location (Required)
                       </Label>
                       <Button type="button" onClick={getLocation} variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-accent/50">
                         Acquire GPS Signal
@@ -259,13 +259,13 @@ export default function RegisterPage() {
                 disabled={isSubmitting} 
                 className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 mt-4 transition-all"
               >
-                {isSubmitting ? "Initializing Node..." : "Deploy Node"}
+                {isSubmitting ? "Registering..." : "Register"}
               </Button>
             </form>
           </CardContent>
           <CardFooter className="justify-center border-t border-border/40 py-6">
             <div className="text-sm text-muted-foreground">
-              Node already registered? <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Access Uplink</Link>
+              Already have an account? <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Sign In</Link>
             </div>
           </CardFooter>
         </Card>

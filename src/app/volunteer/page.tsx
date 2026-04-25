@@ -138,7 +138,7 @@ export default function VolunteerSignUp() {
             </div>
             <CardTitle className="text-3xl font-bold tracking-tight">Volunteer Network</CardTitle>
             <CardDescription className="text-base">
-              Join the disaster response operations node
+              Join the disaster response volunteer network
             </CardDescription>
           </CardHeader>
           

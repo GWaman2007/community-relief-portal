@@ -148,7 +148,7 @@ export default function MapComponent({ filterNode = "All" }: { filterNode?: stri
                       </div>
                       <div className="col-span-2 bg-background border border-border/50 p-1.5 rounded text-center shadow-sm">
                         <span className="block text-[9px] text-muted-foreground uppercase font-black tracking-wider">AI Deduplication Engine</span>
-                        <span className="text-[11px] font-black tracking-widest text-indigo-400 uppercase pt-0.5 inline-block">{report.is_duplicate ? 'Confirmed Duplicate' : 'Original Event Node'}</span>
+                        <span className="text-[11px] font-black tracking-widest text-indigo-400 uppercase pt-0.5 inline-block">{report.is_duplicate ? 'Confirmed Duplicate' : 'Original Event Report'}</span>
                       </div>
                     </div>
                     
