@@ -56,15 +56,15 @@ export default function Home() {
           >
             <Badge variant="outline" className="mb-6 py-1.5 px-4 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-sm font-medium tracking-wide rounded-full">
               <Activity className="w-4 h-4 mr-2 inline" />
-              Live Disaster Response
+              Live Relief Efforts
             </Badge>
             
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-foreground">
               Community <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-transparent bg-clip-text">Relief Portal</span>
             </h1>
             
-            <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed">
-              Our decentralized disaster response architecture leverages real-time AI modeling to deduplicate field reports and securely triangulate skilled community volunteers.
+            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
+              Our decentralized relief efforts architecture leverages real-time AI modeling to deduplicate field reports and securely triangulate skilled community volunteers.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -166,7 +166,7 @@ export default function Home() {
       
       {/* Footer */}
       <footer className="w-full border-t border-border/40 py-8 text-center text-sm text-muted-foreground z-10 bg-background/80 backdrop-blur-lg">
-        <p>EarthNode © 2026. Community Disaster Response Platform.</p>
+        <p>EarthNode © 2026. Community Relief Efforts Platform.</p>
       </footer>
     </div>
   );

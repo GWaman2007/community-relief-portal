@@ -160,7 +160,7 @@ export default function RegisterPage() {
             </div>
             <CardTitle className="text-3xl font-bold tracking-tight">Register</CardTitle>
             <CardDescription className="text-base">
-              Register to help with disaster response efforts
+              Register to help with relief efforts
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-4">
