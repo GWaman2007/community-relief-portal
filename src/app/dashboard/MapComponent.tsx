@@ -160,7 +160,7 @@ export default function MapComponent({ filterNode = "All" }: { filterNode?: stri
 
                     {total_dispatched > 0 && report.status !== 'resolved' && (
                       <div className="mt-3 text-center bg-emerald-500/10 py-2 rounded border border-emerald-500/20 shadow-sm">
-                         <span className="block text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Active Operatives</span>
+                         <span className="block text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Active Volunteers</span>
                          <span className="text-xl font-black text-emerald-500">{total_accepted} <span className="text-emerald-500/50 text-sm">/ {total_dispatched}</span></span>
                          <span className="block text-[9px] text-emerald-400/70 uppercase">Volunteers Responded</span>
                       </div>

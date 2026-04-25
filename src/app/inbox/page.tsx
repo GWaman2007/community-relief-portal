@@ -96,7 +96,7 @@ export default function VolunteerInbox() {
     router.push("/");
   };
 
-  if (loading) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground font-sans">Decrypting inbox...</div>;
+  if (loading) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground font-sans">Loading inbox...</div>;
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden font-sans">
@@ -119,9 +119,9 @@ export default function VolunteerInbox() {
         <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl p-4 md:p-6 mb-6 flex justify-between items-center">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
-              <InboxIcon className="text-emerald-500 w-8 h-8" /> Secure Field Inbox
+              <InboxIcon className="text-emerald-500 w-8 h-8" /> Volunteer Inbox
             </h1>
-            <p className="text-emerald-400 mt-1 text-sm font-mono tracking-widest uppercase">Operative {volunteerRecord.name}</p>
+            <p className="text-emerald-400 mt-1 text-sm font-mono tracking-widest uppercase">Volunteer: {volunteerRecord.name}</p>
           </div>
           <Button variant="outline" onClick={handleLogout} className="bg-background/50 border-border/50 text-muted-foreground hover:text-foreground">
             Logout

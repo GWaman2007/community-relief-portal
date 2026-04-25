@@ -100,7 +100,7 @@ export default function VolunteerDashboard() {
             </Link>
             <div>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                Field Operative Hub
+                Volunteer Dashboard
               </h1>
               <p className="text-sm text-muted-foreground">Authorized Volunteer Command</p>
             </div>

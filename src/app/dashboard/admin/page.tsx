@@ -97,9 +97,9 @@ export default function AdminDashboard() {
             </Link>
             <div>
               <h1 className="text-xl md:text-2xl font-black text-rose-500 tracking-tight flex items-center gap-2">
-                <ShieldAlert className="w-6 h-6" /> CENTRAL COMMAND PLATFORM
+                <ShieldAlert className="w-6 h-6" /> DISASTER RELIEF COMMAND CENTER
               </h1>
-              <p className="text-muted-foreground font-mono text-sm mt-1">Super Admin Controls Unlocked</p>
+              <p className="text-muted-foreground font-mono text-sm mt-1">Global Administrator Access</p>
             </div>
           </div>
           <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="bg-background/50 border-border/50 font-bold transition">Logout</Button>
@@ -187,7 +187,7 @@ export default function AdminDashboard() {
 
             <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-xl h-96 overflow-y-auto">
               <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
-                <CardTitle className="text-blue-400">AI Volunteer Gatekeeper</CardTitle>
+                <CardTitle className="text-blue-400">AI Volunteer Verification</CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-3">
                 {volunteers.map(v => (
@@ -195,7 +195,7 @@ export default function AdminDashboard() {
                     <div>
                       <h3 className="font-semibold text-sm flex items-center gap-1">{v.name}</h3>
                       {v.rejection_reason && <p className="text-xs text-rose-400 leading-tight my-1">AI Output: {v.rejection_reason}</p>}
-                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 mt-1 inline-block rounded ${v.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{v.is_authorized ? "Cleaned" : "Flagged"}</span>
+                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 mt-1 inline-block rounded ${v.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{v.is_authorized ? "Verified" : "Flagged"}</span>
                     </div>
                     <Button 
                       variant="outline" 
