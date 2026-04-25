@@ -4,14 +4,29 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { ArrowLeft, ShieldAlert } from "lucide-react";
 import LiveMetricsHUD from "@/app/components/LiveMetricsHUD";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), { ssr: false });
+
+const SEMANTIC_NODES = [
+  "All",
+  "Public Health",
+  "Water & Sanitation",
+  "Infrastructure",
+  "Food Security",
+  "Education",
+  "Emergency Relief"
+];
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [ngos, setNgos] = useState<any[]>([]);
   const [volunteers, setVolunteers] = useState<any[]>([]);
+  const [filterNode, setFilterNode] = useState("All");
 
   useEffect(() => {
     let volChannel: any;
@@ -64,84 +79,136 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 p-6 flex flex-col items-center">
-      <div className="w-full max-w-7xl flex flex-col gap-6">
-        <div className="flex justify-between items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
-          <div>
-            <h1 className="text-2xl font-black text-rose-500 tracking-tight flex items-center gap-2">🛡️ CENTRAL COMMAND PLATFORM</h1>
-            <p className="text-slate-400 font-mono text-sm mt-1">Super Admin Controls Unlocked</p>
+    <div className="min-h-screen bg-background text-foreground p-6 flex flex-col items-center relative overflow-hidden font-sans">
+      
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] right-[10%] w-[40%] h-[40%] rounded-full bg-rose-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] rounded-full bg-emerald-500/10 blur-[120px]" />
+      </div>
+
+      <div className="w-full max-w-7xl flex flex-col gap-6 z-10">
+        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl p-6 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Button variant="ghost" size="icon" className="rounded-full hover:bg-background/80 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-xl md:text-2xl font-black text-rose-500 tracking-tight flex items-center gap-2">
+                <ShieldAlert className="w-6 h-6" /> CENTRAL COMMAND PLATFORM
+              </h1>
+              <p className="text-muted-foreground font-mono text-sm mt-1">Super Admin Controls Unlocked</p>
+            </div>
           </div>
-          <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="bg-slate-700 hover:bg-slate-600 px-5 py-2 rounded font-bold transition">Logout</button>
-        </div>
+          <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="bg-background/50 border-border/50 font-bold transition">Logout</Button>
+        </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="col-span-1 lg:col-span-2 bg-slate-800 rounded-2xl border border-slate-700 shadow-xl p-4">
-            <h2 className="font-bold text-lg mb-4 text-emerald-400">Live Global Heatmap</h2>
-            <LiveMetricsHUD />
-            <MapComponent filterNode="All" />
-          </div>
+          <Card className="col-span-1 lg:col-span-2 bg-card/60 backdrop-blur-xl border-border/50 shadow-xl overflow-hidden flex flex-col">
+            <CardHeader className="pb-4 flex flex-row items-center justify-between border-b border-border/50 bg-background/50">
+              <CardTitle className="text-emerald-400">Live Global Heatmap</CardTitle>
+              <select 
+                value={filterNode} 
+                onChange={(e) => setFilterNode(e.target.value)}
+                className="bg-background text-foreground border border-border/50 rounded-lg px-3 py-1.5 text-xs font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+              >
+                {SEMANTIC_NODES.map(node => (
+                  <option key={node} value={node}>{node === "All" ? "🌍 Global Feed" : node}</option>
+                ))}
+              </select>
+            </CardHeader>
+            <CardContent className="p-0 flex-1 flex flex-col">
+              <div className="p-4 border-b border-border/40 bg-background/30">
+                <LiveMetricsHUD />
+              </div>
+              <div className="flex-1 relative min-h-[500px]">
+                <MapComponent filterNode={filterNode} />
+              </div>
+            </CardContent>
+          </Card>
 
           <div className="space-y-6">
-            <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl p-6 h-96 overflow-y-auto">
-              <h2 className="font-bold text-lg mb-4 text-cyan-400">NGO Trust Architecture</h2>
-              <table className="w-full text-left border-collapse">
-                <tbody>
-                  {ngos.length === 0 ? (
-                    <tr><td colSpan={3} className="p-3 text-slate-500 italic text-center text-sm">No NGOs registered.</td></tr>
-                  ) : (
-                    ngos.map((ngo: any) => (
-                      <tr key={ngo.id} className="border-t border-slate-700/50">
-                        <td className="p-3">
-                          <span className={`font-medium text-sm whitespace-nowrap block ${ngo.is_authorized ? 'text-emerald-400' : 'text-slate-300'}`}>{ngo.name}</span>
-                          <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 mt-1 inline-block rounded ${ngo.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{ngo.is_authorized ? "Trusted System" : "Pending Validation"}</span>
-                        </td>
-                        <td className="p-3 text-slate-400 text-xs text-ellipsis overflow-hidden">{ngo.email}</td>
-                        <td className="p-3 align-middle">
-                          {ngo.is_authorized ? (
-                            <button 
-                              onClick={async () => {
-                                const { data: { session } } = await supabase.auth.getSession();
-                                await fetch("/api/admin/ngo/suspend", {
-                                   method: "POST", 
-                                   headers: { "Content-Type" : "application/json", "Authorization": `Bearer ${session?.access_token}` }, 
-                                   body: JSON.stringify({ ngo_id: ngo.id }) 
-                                });
-                                // Optimistically update the primary ngos array modifying the boolean flag
-                                setNgos(prev => prev.map(n => n.id === ngo.id ? { ...n, is_authorized: false } : n));
-                              }}
-                              className="w-full bg-rose-900/30 hover:bg-rose-900 border border-rose-500/50 text-rose-500 hover:text-white px-3 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all"
-                            >
-                              Revoke
-                            </button>
-                          ) : (
-                            <button 
-                              onClick={() => toggleAuth("ngos", ngo.id, ngo.is_authorized)}
-                              className="w-full bg-cyan-900/40 hover:bg-cyan-800 border border-cyan-500/50 text-cyan-400 hover:text-white px-3 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all shadow-[0_0_10px_rgba(34,211,238,0.2)]"
-                            >
-                              Authorize Setup
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-xl h-96 overflow-y-auto">
+              <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
+                <CardTitle className="text-cyan-400">NGO Trust Architecture</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <table className="w-full text-left border-collapse table-fixed">
+                  <colgroup>
+                    <col className="w-5/12" />
+                    <col className="w-4/12" />
+                    <col className="w-3/12" />
+                  </colgroup>
+                  <tbody>
+                    {ngos.length === 0 ? (
+                      <tr><td colSpan={3} className="p-3 text-muted-foreground italic text-center text-sm">No NGOs registered.</td></tr>
+                    ) : (
+                      ngos.map((ngo: any) => (
+                        <tr key={ngo.id} className="border-t border-border/50">
+                          <td className="p-3 overflow-hidden">
+                            <span className={`font-medium text-sm whitespace-nowrap block text-ellipsis overflow-hidden ${ngo.is_authorized ? 'text-emerald-400' : 'text-foreground'}`}>{ngo.name}</span>
+                            <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 mt-1 inline-block rounded ${ngo.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{ngo.is_authorized ? "Trusted System" : "Pending Validation"}</span>
+                          </td>
+                          <td className="p-3 text-muted-foreground text-xs text-ellipsis overflow-hidden whitespace-nowrap">{ngo.email}</td>
+                          <td className="p-3 align-middle text-right">
+                            {ngo.is_authorized ? (
+                              <button 
+                                onClick={async () => {
+                                  const { data: { session } } = await supabase.auth.getSession();
+                                  await fetch("/api/admin/ngo/suspend", {
+                                     method: "POST", 
+                                     headers: { "Content-Type" : "application/json", "Authorization": `Bearer ${session?.access_token}` }, 
+                                     body: JSON.stringify({ ngo_id: ngo.id }) 
+                                  });
+                                  setNgos(prev => prev.map(n => n.id === ngo.id ? { ...n, is_authorized: false } : n));
+                                }}
+                                className="w-full max-w-[100px] bg-rose-900/30 hover:bg-rose-900 border border-rose-500/50 text-rose-500 hover:text-white px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all"
+                              >
+                                Revoke
+                              </button>
+                            ) : (
+                              <button 
+                                onClick={() => toggleAuth("ngos", ngo.id, ngo.is_authorized)}
+                                className="w-full max-w-[100px] bg-cyan-900/40 hover:bg-cyan-800 border border-cyan-500/50 text-cyan-400 hover:text-white px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all shadow-[0_0_10px_rgba(34,211,238,0.2)]"
+                              >
+                                Authorize
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </CardContent>
+            </Card>
 
-            <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl p-6 h-96 overflow-y-auto">
-              <h2 className="font-bold text-lg mb-4 text-blue-400">AI Volunteer Gatekeeper</h2>
-              {volunteers.map(v => (
-                <div key={v.id} className="bg-slate-900 border border-slate-700 p-3 rounded mb-3 flex items-center justify-between">
-                  <div>
-                    <h3 className="font-semibold text-sm flex items-center gap-1">{v.name}</h3>
-                    {v.rejection_reason && <p className="text-xs text-rose-400 leading-tight my-1">AI Output: {v.rejection_reason}</p>}
-                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 mt-1 inline-block rounded ${v.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{v.is_authorized ? "Cleaned" : "Flagged"}</span>
+            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-xl h-96 overflow-y-auto">
+              <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
+                <CardTitle className="text-blue-400">AI Volunteer Gatekeeper</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 space-y-3">
+                {volunteers.map(v => (
+                  <div key={v.id} className="bg-background/50 border border-border/50 p-3 rounded-xl flex items-center justify-between shadow-sm">
+                    <div>
+                      <h3 className="font-semibold text-sm flex items-center gap-1">{v.name}</h3>
+                      {v.rejection_reason && <p className="text-xs text-rose-400 leading-tight my-1">AI Output: {v.rejection_reason}</p>}
+                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 mt-1 inline-block rounded ${v.is_authorized ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>{v.is_authorized ? "Cleaned" : "Flagged"}</span>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => toggleAuth("volunteers", v.id, v.is_authorized)} 
+                      className={`text-xs font-bold border-border/50 ${v.is_authorized ? 'hover:bg-rose-900/30 text-rose-400' : 'hover:bg-emerald-900/30 text-emerald-400'}`}
+                    >
+                      {v.is_authorized ? "Ban" : "Approve"}
+                    </Button>
                   </div>
-                  <button onClick={() => toggleAuth("volunteers", v.id, v.is_authorized)} className="bg-slate-700 hover:bg-slate-600 px-3 py-1 text-xs font-bold rounded">{v.is_authorized ? "Ban" : "Approve"}</button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

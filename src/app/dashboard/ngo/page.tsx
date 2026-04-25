@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { ArrowLeft, MapPin, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), { ssr: false });
 
@@ -23,43 +27,90 @@ export default function NgoDashboard() {
     checkAuth();
   }, [router]);
 
-  if (!profile) return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">Loading Auth...</div>;
+  if (!profile) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground">Loading Auth...</div>;
 
   if (!profile.is_authorized) {
     if (profile.status === 'revoked') {
       return (
-        <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white flex-col">
-          <h1 className="text-3xl font-black text-rose-500 tracking-tight flex items-center gap-2">⚠️ Access Revoked</h1>
-          <p className="text-slate-400 mt-2 max-w-lg text-center leading-relaxed font-medium tracking-wide">Your NGO operating license has been explicitly suspended by Central Command. Please contact the Platform Administrator directly regarding your access.</p>
-          <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="mt-8 text-rose-400 font-bold hover:underline border border-rose-500/30 px-6 py-2 rounded">Sign Out</button>
+        <div className="min-h-screen bg-background flex items-center justify-center flex-col p-4 relative overflow-hidden">
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-rose-500/10 blur-[150px]" />
+          </div>
+          <Card className="bg-card/60 backdrop-blur-xl border-rose-500/20 shadow-2xl z-10 max-w-lg w-full text-center py-10 px-6">
+            <h1 className="text-3xl font-black text-rose-500 tracking-tight flex items-center justify-center gap-2 mb-4">⚠️ Access Revoked</h1>
+            <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-8">Your NGO operating license has been explicitly suspended by Central Command. Please contact the Platform Administrator directly regarding your access.</p>
+            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-rose-400 hover:text-rose-300 border-rose-500/30 hover:bg-rose-500/10">Sign Out</Button>
+          </Card>
         </div>
       );
     }
 
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white flex-col">
-        <h1 className="text-3xl font-black text-amber-500 tracking-tight flex items-center gap-2">⏳ Pending Administrator Approval</h1>
-        <p className="text-slate-400 mt-2 max-w-lg text-center leading-relaxed font-medium tracking-wide">Your NGO credentials are currently under review by Central Command. Your dashboard will unlock once you receive global operational clearance.</p>
-        <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="mt-8 text-amber-500/70 font-bold hover:text-amber-400 hover:underline border border-amber-500/30 px-6 py-2 rounded transition-colors">Return to Root</button>
+      <div className="min-h-screen bg-background flex items-center justify-center flex-col p-4 relative overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-amber-500/10 blur-[150px]" />
+        </div>
+        <Card className="bg-card/60 backdrop-blur-xl border-amber-500/20 shadow-2xl z-10 max-w-lg w-full text-center py-10 px-6">
+          <h1 className="text-3xl font-black text-amber-500 tracking-tight flex items-center justify-center gap-2 mb-4">⏳ Pending Approval</h1>
+          <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-8">Your NGO credentials are currently under review by Central Command. Your dashboard will unlock once you receive global operational clearance.</p>
+          <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-amber-500 hover:text-amber-400 border-amber-500/30 hover:bg-amber-500/10">Return to Hub</Button>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
-      <div className="max-w-6xl mx-auto flex gap-6 flex-col lg:flex-row">
-        <div className="flex-1 bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-xl">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="font-bold text-xl text-white">📍 Global Sensor Coverage</h1>
-            <button onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-xs bg-slate-700 text-slate-300 px-3 py-1 rounded">Logout</button>
+    <div className="min-h-screen bg-background flex flex-col relative overflow-hidden font-sans p-6">
+      
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] right-[10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] rounded-full bg-emerald-500/10 blur-[120px]" />
+      </div>
+
+      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 z-10">
+        
+        {/* Navigation Bar */}
+        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl p-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Button variant="ghost" size="icon" className="rounded-full hover:bg-background/80 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+                NGO Operations Center
+              </h1>
+              <p className="text-sm text-muted-foreground">Authorized Entity Command</p>
+            </div>
           </div>
-          <MapComponent filterNode="All" />
-        </div>
-        <div className="w-full lg:w-1/3 space-y-4">
-          <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl flex flex-col items-center text-center">
-             <h2 className="text-emerald-400 font-black text-2xl mb-1">Upload New Scenario</h2>
-             <p className="text-slate-400 text-sm mb-4">Deploy active data to the AI deduplication pipeline.</p>
-             <button onClick={() => router.push("/report")} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg shadow-lg transition">Submit Field Report Portal</button>
+          <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="bg-background/50 border-border/50 text-muted-foreground hover:text-foreground">Logout</Button>
+        </Card>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="col-span-1 lg:col-span-2 bg-card/60 backdrop-blur-xl border-border/50 shadow-xl overflow-hidden flex flex-col">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-cyan-400 flex items-center gap-2">
+                <MapPin className="w-5 h-5" /> Global Sensor Coverage
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0 flex-1 relative min-h-[500px]">
+              <MapComponent filterNode="All" />
+            </CardContent>
+          </Card>
+          
+          <div className="col-span-1">
+            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-xl h-full flex flex-col items-center justify-center text-center p-8">
+               <div className="bg-emerald-500/10 p-4 rounded-full text-emerald-400 mb-6">
+                 <Plus className="w-12 h-12" />
+               </div>
+               <h2 className="text-foreground font-black text-2xl mb-2">Deploy Scenario</h2>
+               <p className="text-muted-foreground text-sm mb-8 leading-relaxed">Submit verified field data to the AI deduplication pipeline to synchronize response nodes.</p>
+               <Button onClick={() => router.push("/report")} size="lg" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all">
+                 Launch Field Report
+               </Button>
+            </Card>
           </div>
         </div>
       </div>

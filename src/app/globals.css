@@ -128,3 +128,22 @@
     @apply font-sans;
   }
 }
+
+/* Leaflet Dark Theme Overrides */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: #fff !important;
+  z-index: 50 !important;
+  top: 10px !important;
+  right: 10px !important;
+}

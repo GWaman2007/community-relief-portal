@@ -5,6 +5,13 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowLeft, MapPin, Search, UploadCloud, X, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function FieldPortal() {
   const router = useRouter();
@@ -134,102 +141,128 @@ export default function FieldPortal() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-        <div className="bg-blue-600 p-6 text-white text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Field Portal</h1>
-          <p className="text-blue-100 text-sm mt-1">Submit NGO Field Reports</p>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          {message && (
-            <div className={`p-3 rounded-lg text-sm font-medium ${message.includes('Error') || message.includes('Failed') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-              {message}
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">Report Details</label>
-            <textarea 
-              className="w-full border border-slate-300 rounded-lg p-3 h-32 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none text-black"
-              placeholder="Describe the situation here..."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">Upload Image (Optional)</label>
-            <div className="flex items-center justify-center w-full">
-              <label htmlFor="image-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
-                  <svg className="w-8 h-8 mb-3 text-slate-400 mx-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                  </svg>
-                  <p className="mb-2 text-sm text-slate-500"><span className="font-semibold">Tap to select image</span></p>
-                </div>
-                <input id="image-upload" ref={fileInputRef} type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
-              </label>
-            </div>
-            {image && (
-              <div className="mt-3 rounded-lg overflow-hidden border border-slate-200 relative">
-                <img src={image} alt="Preview" className="w-full h-auto object-cover max-h-48" />
-                <button type="button" onClick={() => setImage(null)} className="absolute top-2 right-2 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-md hover:bg-red-700 text-xs">X</button>
-              </div>
-            )}
-          </div>
-
-          <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-4">
-            <button 
-              type="button" 
-              onClick={getLocation}
-              className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              Get GPS Location
-            </button>
-            <div className="flex gap-2">
-              <input 
-                 type="text" 
-                 placeholder="Or type address manually..." 
-                 value={manualAddress}
-                 onChange={(e) => setManualAddress(e.target.value)}
-                 onKeyDown={(e) => {
-                   if (e.key === 'Enter') {
-                     e.preventDefault();
-                     getManualLocation();
-                   }
-                 }}
-                 className="flex-1 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 outline-none text-black"
-              />
-              <button 
-                 type="button" 
-                 onClick={getManualLocation}
-                 className="bg-blue-600 text-white px-4 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-              >
-                 Search
-              </button>
-            </div>
-            {locationStatus && (
-              <p className="text-xs text-center mt-2 text-slate-600">{locationStatus}</p>
-            )}
-            {latitude && longitude && (
-              <p className="text-xs text-center mt-1 font-mono text-blue-600">
-                {latitude.toFixed(6)}, {longitude.toFixed(6)}
-              </p>
-            )}
-          </div>
-
-          <button 
-            type="submit" 
-            disabled={isSubmitting || !latitude || !longitude}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
-          >
-            {isSubmitting ? "Processing..." : "Submit Report"}
-          </button>
-        </form>
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+      
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] right-[10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] rounded-full bg-blue-500/10 blur-[120px]" />
       </div>
+
+      <div className="z-10 absolute top-6 left-6">
+        <Link href="/dashboard/ngo">
+          <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="w-4 h-4" /> Return to Dashboard
+          </Button>
+        </Link>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-xl z-10 py-12"
+      >
+        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl shadow-cyan-900/10">
+          <CardHeader className="text-center space-y-2 pt-8">
+            <div className="mx-auto bg-cyan-500/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+              <UploadCloud className="w-6 h-6 text-cyan-500" />
+            </div>
+            <CardTitle className="text-3xl font-bold tracking-tight">Field Portal</CardTitle>
+            <CardDescription className="text-base">
+              Submit critical NGO field reports to the AI pipeline
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {message && (
+                <div className={`p-3 rounded-md text-sm font-medium border ${message.includes('Error') || message.includes('Failed') ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`}>
+                  {message}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label>Report Details</Label>
+                <textarea 
+                  className="w-full border border-border/50 bg-background/50 text-foreground rounded-lg p-3 h-32 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all resize-none"
+                  placeholder="Describe the situation here..."
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Upload Image (Optional)</Label>
+                <div className="flex items-center justify-center w-full">
+                  <label htmlFor="image-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-border/50 border-dashed rounded-lg cursor-pointer bg-background/30 hover:bg-background/50 transition-colors">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                      <UploadCloud className="w-8 h-8 mb-3 text-muted-foreground mx-auto" />
+                      <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Tap to select image</span></p>
+                    </div>
+                    <input id="image-upload" ref={fileInputRef} type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                  </label>
+                </div>
+                {image && (
+                  <div className="mt-3 rounded-lg overflow-hidden border border-border/50 relative">
+                    <img src={image} alt="Preview" className="w-full h-auto object-cover max-h-48" />
+                    <button type="button" onClick={() => setImage(null)} className="absolute top-2 right-2 bg-red-600/90 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-red-700 transition-colors"><X className="w-4 h-4"/></button>
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-background/30 p-4 rounded-xl border border-border/50 space-y-4">
+                <div>
+                  <Label className="flex items-center gap-2 mb-2 text-cyan-400">
+                    <MapPin className="w-4 h-4" /> Operational Coordinates (Required)
+                  </Label>
+                  <Button type="button" onClick={getLocation} variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-accent/50 text-foreground">
+                    Acquire GPS Signal
+                  </Button>
+                </div>
+                <div className="flex gap-2">
+                  <Input 
+                     type="text" 
+                     placeholder="Or triangulate manually..." 
+                     value={manualAddress}
+                     onChange={(e) => setManualAddress(e.target.value)}
+                     onKeyDown={(e) => {
+                       if (e.key === 'Enter') {
+                         e.preventDefault();
+                         getManualLocation();
+                       }
+                     }}
+                     className="bg-background/50 border-border/50 focus-visible:ring-cyan-500"
+                  />
+                  <Button 
+                     type="button" 
+                     onClick={getManualLocation}
+                     className="bg-cyan-600 hover:bg-cyan-500 text-white shrink-0"
+                  >
+                     <Search className="w-4 h-4" />
+                  </Button>
+                </div>
+                {locationStatus && (
+                  <p className="text-xs text-center mt-2 text-muted-foreground">{locationStatus}</p>
+                )}
+                {latitude && longitude && (
+                  <p className="text-xs text-center mt-1 font-mono text-cyan-400">
+                    {latitude.toFixed(6)}, {longitude.toFixed(6)}
+                  </p>
+                )}
+              </div>
+
+              <Button 
+                type="submit" 
+                disabled={isSubmitting || !latitude || !longitude}
+                className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold h-12 transition-all disabled:opacity-50"
+              >
+                {isSubmitting ? "Transmitting..." : <><Send className="w-4 h-4 mr-2" /> Transmit Report</>}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 }

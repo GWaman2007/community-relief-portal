@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowLeft, ShieldAlert, MapPin, Search } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const SKILL_OPTIONS = [
   "Medical Doctor", "Nurse", "First Aid Certified", "Mental Health Counselor",
@@ -77,7 +85,6 @@ export default function RegisterPage() {
     setIsSubmitting(true);
     setStatus(null);
 
-    // 1. Supabase Auth Signup - Explicitly injecting role string
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -89,7 +96,6 @@ export default function RegisterPage() {
       return setStatus({ type: 'error', msg: authError?.message || "Registration failed. Please try again." });
     }
 
-    // 2. Tie public records to UUID
     if (role === "volunteer") {
       try {
         const res = await fetch("/api/volunteer/register", {
@@ -125,58 +131,145 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden text-slate-800">
-        <div className="bg-emerald-600 p-6 text-white text-center">
-          <h1 className="text-2xl font-bold">Register Account</h1>
-          <p className="text-emerald-100 text-sm mt-1">Join the community relief network</p>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {status && (
-            <div className={`p-3 rounded text-sm font-medium ${status.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'}`}>
-              {status.msg}
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-2 mb-4 bg-slate-100 p-1.5 rounded-lg border border-slate-200">
-            <button type="button" onClick={() => setRole("volunteer")} className={`py-2 rounded font-semibold text-xs md:text-sm transition-all ${role === "volunteer" ? 'bg-white shadow text-emerald-600' : 'text-slate-500 hover:text-slate-700'}`}>Field Volunteer</button>
-            <button type="button" onClick={() => setRole("ngo")} className={`py-2 rounded font-semibold text-xs md:text-sm transition-all ${role === "ngo" ? 'bg-white shadow text-emerald-600' : 'text-slate-500 hover:text-slate-700'}`}>NGO Contributor</button>
-          </div>
-
-          <div><label className="block text-sm font-semibold mb-1">Full Name</label><input type="text" required value={name} onChange={e=>setName(e.target.value)} className="w-full border p-2 rounded outline-none focus:ring-emerald-500 focus:border-emerald-500" /></div>
-          <div><label className="block text-sm font-semibold mb-1">Email Address</label><input type="email" required value={email} onChange={e=>setEmail(e.target.value)} className="w-full border p-2 rounded outline-none focus:ring-emerald-500 focus:border-emerald-500" /></div>
-          <div><label className="block text-sm font-semibold mb-1">Password</label><input type="password" required minLength={6} value={password} onChange={e=>setPassword(e.target.value)} className="w-full border p-2 rounded outline-none focus:ring-emerald-500 focus:border-emerald-500" /></div>
-
-          {role === "volunteer" && (
-            <div className="border-t pt-4 mt-4 space-y-5">
-              <div className="bg-slate-50 p-4 rounded border border-slate-200">
-                <label className="block text-sm font-semibold mb-2">My Location (Required)</label>
-                <button type="button" onClick={getLocation} className="w-full bg-slate-800 text-white font-medium py-2 rounded hover:bg-slate-700 transition">Get My Location</button>
-                <div className="mt-3 flex gap-2">
-                  <input type="text" placeholder="Or enter city manually..." value={manualAddress} onKeyDown={e => e.key === 'Enter' && searchAddress(e)} onChange={e => setManualAddress(e.target.value)} className="flex-1 border rounded px-3 py-2 text-sm outline-none" />
-                  <button type="button" onClick={searchAddress} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm font-medium">Search</button>
-                </div>
-                {locationStatus && <p className="text-xs text-center mt-3 text-slate-500">{locationStatus}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2">Select Your Skills</label>
-                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-3 border rounded bg-slate-50 text-sm">
-                  {SKILL_OPTIONS.map(skill => (
-                    <label key={skill} className="flex items-center space-x-2 cursor-pointer p-1 rounded"><input type="checkbox" checked={selectedSkills.includes(skill)} onChange={() => handleSkillToggle(skill)} className="rounded text-emerald-600 focus:ring-emerald-500" /><span>{skill}</span></label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          <button type="submit" disabled={isSubmitting} className="w-full bg-emerald-600 text-white font-semibold py-3 rounded mt-4 hover:bg-emerald-700 disabled:opacity-70">{isSubmitting ? "Processing..." : "Create Account"}</button>
-          
-          <div className="text-center text-sm mt-4 text-slate-500">
-            Already have an account? <a href="/login" className="text-emerald-600 font-bold hover:underline">Log in</a>
-          </div>
-        </form>
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+      
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px]" />
       </div>
+
+      <div className="z-10 absolute top-6 left-6">
+        <Link href="/">
+          <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="w-4 h-4" /> Return to Hub
+          </Button>
+        </Link>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-xl z-10 py-12"
+      >
+        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl shadow-emerald-900/10">
+          <CardHeader className="text-center space-y-2 pt-8">
+            <div className="mx-auto bg-emerald-500/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+              <ShieldAlert className="w-6 h-6 text-emerald-500" />
+            </div>
+            <CardTitle className="text-3xl font-bold tracking-tight">Deploy Node</CardTitle>
+            <CardDescription className="text-base">
+              Register your operational entity on the EarthNode network
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {status && (
+                <div className={`p-3 rounded-md text-sm font-medium border ${status.type === 'error' ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`}>
+                  {status.msg}
+                </div>
+              )}
+
+              <div className="flex gap-2 p-1.5 rounded-lg bg-background/50 border border-border/50">
+                <Button 
+                  type="button" 
+                  variant={role === "volunteer" ? "default" : "ghost"}
+                  className={`flex-1 ${role === "volunteer" ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md" : "text-muted-foreground"}`}
+                  onClick={() => setRole("volunteer")}
+                >
+                  Field Volunteer
+                </Button>
+                <Button 
+                  type="button" 
+                  variant={role === "ngo" ? "default" : "ghost"}
+                  className={`flex-1 ${role === "ngo" ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md" : "text-muted-foreground"}`}
+                  onClick={() => setRole("ngo")}
+                >
+                  NGO Contributor
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Entity Designation (Full Name / Org Name)</Label>
+                  <Input id="name" type="text" required value={name} onChange={e=>setName(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Encrypted Uplink (Email Address)</Label>
+                  <Input id="email" type="email" required value={email} onChange={e=>setEmail(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Passkey (Min 6 Characters)</Label>
+                  <Input id="password" type="password" required minLength={6} value={password} onChange={e=>setPassword(e.target.value)} className="bg-background/50 border-border/50 focus-visible:ring-emerald-500" />
+                </div>
+              </div>
+
+              {role === "volunteer" && (
+                <div className="border-t border-border/40 pt-6 mt-6 space-y-6">
+                  <div className="bg-background/30 p-4 rounded-xl border border-border/50 space-y-4">
+                    <div>
+                      <Label className="flex items-center gap-2 mb-2 text-emerald-400">
+                        <MapPin className="w-4 h-4" /> Operational Coordinates (Required)
+                      </Label>
+                      <Button type="button" onClick={getLocation} variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-accent/50">
+                        Acquire GPS Signal
+                      </Button>
+                    </div>
+                    
+                    <div className="flex gap-2 items-center">
+                      <div className="flex-1 relative">
+                        <Input 
+                          type="text" 
+                          placeholder="Or triangulate city manually..." 
+                          value={manualAddress} 
+                          onKeyDown={e => e.key === 'Enter' && searchAddress(e)} 
+                          onChange={e => setManualAddress(e.target.value)} 
+                          className="bg-background/50 border-border/50 focus-visible:ring-emerald-500 pr-10" 
+                        />
+                      </div>
+                      <Button type="button" onClick={searchAddress} size="icon" className="bg-emerald-600 hover:bg-emerald-500 text-white shrink-0">
+                        <Search className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    {locationStatus && <p className="text-xs text-muted-foreground">{locationStatus}</p>}
+                  </div>
+
+                  <div>
+                    <Label className="block mb-3">Field Capabilities & Skills</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-3 border border-border/50 rounded-xl bg-background/30 text-sm">
+                      {SKILL_OPTIONS.map(skill => (
+                        <Label key={skill} className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-accent/50 transition-colors">
+                          <input 
+                            type="checkbox" 
+                            checked={selectedSkills.includes(skill)} 
+                            onChange={() => handleSkillToggle(skill)} 
+                            className="rounded bg-background border-border/50 text-emerald-600 focus:ring-emerald-500 w-4 h-4" 
+                          />
+                          <span className="font-normal">{skill}</span>
+                        </Label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <Button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 mt-4 transition-all"
+              >
+                {isSubmitting ? "Initializing Node..." : "Deploy Node"}
+              </Button>
+            </form>
+          </CardContent>
+          <CardFooter className="justify-center border-t border-border/40 py-6">
+            <div className="text-sm text-muted-foreground">
+              Node already registered? <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">Access Uplink</Link>
+            </div>
+          </CardFooter>
+        </Card>
+      </motion.div>
     </div>
   );
 }

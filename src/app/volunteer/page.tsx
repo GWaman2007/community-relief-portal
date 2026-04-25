@@ -1,6 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowLeft, MapPin, Search, UserPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const SKILL_OPTIONS = [
   "Medical Doctor", "Nurse", "First Aid Certified", "Mental Health Counselor",
@@ -101,99 +109,128 @@ export default function VolunteerSignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-        <div className="bg-emerald-600 p-6 text-white text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Volunteer Registration</h1>
-          <p className="text-emerald-100 text-sm mt-1">Join the disaster response network</p>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          {status && (
-            <div className={`p-3 rounded-lg text-sm font-medium ${status.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'}`}>
-              {status.msg}
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+      
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/10 blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[150px]" />
+      </div>
+
+      <div className="z-10 absolute top-6 left-6">
+        <Link href="/">
+          <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="w-4 h-4" /> Return to Hub
+          </Button>
+        </Link>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-lg z-10 py-12"
+      >
+        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl shadow-emerald-900/10">
+          <CardHeader className="text-center space-y-2 pt-8">
+            <div className="mx-auto bg-emerald-500/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+              <UserPlus className="w-6 h-6 text-emerald-500" />
             </div>
-          )}
+            <CardTitle className="text-3xl font-bold tracking-tight">Volunteer Network</CardTitle>
+            <CardDescription className="text-base">
+              Join the disaster response operations node
+            </CardDescription>
+          </CardHeader>
+          
+          <CardContent className="pt-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {status && (
+                <div className={`p-3 rounded-md text-sm font-medium border ${status.type === 'error' ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`}>
+                  {status.msg}
+                </div>
+              )}
 
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
-            <input 
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-black"
-              placeholder="John Doe"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">My Location (Required)</label>
-            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-              <button 
-                type="button" 
-                onClick={getLocation}
-                className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                Pinpoint My Live Location
-              </button>
-
-              <div className="mt-4 flex gap-2">
-                <input 
-                  type="text" 
-                  placeholder="Or enter city manually..." 
-                  value={manualAddress}
-                  onChange={e => setManualAddress(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && searchAddress(e)}
-                  className="flex-1 border border-slate-300 rounded px-3 py-2 text-sm text-black"
+              <div className="space-y-2">
+                <Label>Full Name</Label>
+                <Input 
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="bg-background/50 border-border/50 focus-visible:ring-emerald-500 h-12"
+                  placeholder="John Doe"
                 />
-                <button 
-                  type="button" 
-                  onClick={searchAddress}
-                  className="bg-emerald-600 text-white px-4 py-2 rounded text-sm font-semibold whitespace-nowrap"
-                >
-                  Search
-                </button>
               </div>
 
-              {locationStatus && (
-                <p className="text-xs text-center mt-3 text-slate-600">{locationStatus}</p>
-              )}
-              {latitude && longitude && (
-                <p className="text-xs text-center mt-1 font-mono text-emerald-600">
-                  {latitude.toFixed(6)}, {longitude.toFixed(6)}
-                </p>
-              )}
-            </div>
-          </div>
+              <div className="space-y-2">
+                <Label>My Location (Required)</Label>
+                <div className="bg-background/30 p-4 rounded-xl border border-border/50 space-y-4">
+                  <Button 
+                    type="button" 
+                    onClick={getLocation}
+                    variant="outline"
+                    className="w-full bg-background/50 border-border/50 hover:bg-accent/50 text-foreground"
+                  >
+                    <MapPin className="w-4 h-4 mr-2 text-emerald-500" /> Pinpoint My Live Location
+                  </Button>
 
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">Select Your Skills</label>
-            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 bg-slate-50 border border-slate-200 rounded-lg shadow-inner">
-              {SKILL_OPTIONS.map(skill => (
-                <label key={skill} className="flex items-center space-x-2 text-sm text-slate-700 cursor-pointer p-1 hover:bg-slate-100 rounded">
-                  <input 
-                    type="checkbox" 
-                    checked={selectedSkills.includes(skill)}
-                    onChange={() => handleSkillToggle(skill)}
-                    className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4"
-                  />
-                  <span>{skill}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+                  <div className="flex gap-2">
+                    <Input 
+                      type="text" 
+                      placeholder="Or enter city manually..." 
+                      value={manualAddress}
+                      onChange={e => setManualAddress(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && searchAddress(e)}
+                      className="bg-background/50 border-border/50 focus-visible:ring-emerald-500"
+                    />
+                    <Button 
+                      type="button" 
+                      onClick={searchAddress}
+                      className="bg-emerald-600 hover:bg-emerald-500 text-white shrink-0"
+                    >
+                      <Search className="w-4 h-4" />
+                    </Button>
+                  </div>
 
-          <button 
-            type="submit" 
-            disabled={isSubmitting || !latitude || !longitude || selectedSkills.length === 0 || !name}
-            className="w-full bg-emerald-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg mt-4"
-          >
-            {isSubmitting ? "Registering..." : "Register to Dispatch Network"}
-          </button>
-        </form>
-      </div>
+                  {locationStatus && (
+                    <p className="text-xs text-center mt-3 text-muted-foreground">{locationStatus}</p>
+                  )}
+                  {latitude && longitude && (
+                    <p className="text-xs text-center mt-1 font-mono text-emerald-400">
+                      {latitude.toFixed(6)}, {longitude.toFixed(6)}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Select Your Skills</Label>
+                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-4 bg-background/30 border border-border/50 rounded-xl">
+                  {SKILL_OPTIONS.map(skill => (
+                    <div key={skill} className="flex items-start space-x-2 p-1">
+                      <Checkbox 
+                        id={skill}
+                        checked={selectedSkills.includes(skill)}
+                        onCheckedChange={() => handleSkillToggle(skill)}
+                        className="data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500 border-muted-foreground/50 mt-0.5"
+                      />
+                      <label htmlFor={skill} className="text-sm text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">{skill}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Button 
+                type="submit" 
+                disabled={isSubmitting || !latitude || !longitude || selectedSkills.length === 0 || !name}
+                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-50"
+              >
+                {isSubmitting ? "Registering..." : "Join Dispatch Network"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 }

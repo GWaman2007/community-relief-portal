@@ -25,20 +25,9 @@ const getIcon = (status: string) => {
   return criticalIcon;
 };
 
-const SEMANTIC_NODES = [
-  "All",
-  "Public Health",
-  "Water & Sanitation",
-  "Infrastructure",
-  "Food Security",
-  "Education",
-  "Emergency Relief"
-];
-
-export default function MapComponent({ filterNode }: { filterNode?: string }) {
+export default function MapComponent({ filterNode = "All" }: { filterNode?: string }) {
   const [reports, setReports] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [activeFilter, setActiveFilter] = useState(filterNode || "All");
 
   useEffect(() => {
     async function fetchAuth() {
@@ -54,8 +43,8 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
         .select("*, notifications(*), ngos(is_authorized)")
         .order("created_at", { ascending: false });
 
-      if (activeFilter && activeFilter !== "All") {
-        query = query.eq("semantic_node", activeFilter);
+      if (filterNode && filterNode !== "All") {
+        query = query.eq("semantic_node", filterNode);
       }
       
       const { data, error } = await query;
@@ -75,7 +64,7 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
       supabase.removeChannel(channel1);
       supabase.removeChannel(channel2);
     };
-  }, [activeFilter, filterNode]);
+  }, [filterNode]);
 
   const handleDispatch = async (report: any) => {
     try {
@@ -120,20 +109,8 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
   };
 
   return (
-    <div className="w-full h-[500px] border-4 border-slate-700/50 rounded-xl shadow-2xl relative">
-      <div className="absolute top-4 right-4 z-[1000]">
-        <select 
-          value={activeFilter} 
-          onChange={(e) => setActiveFilter(e.target.value)}
-          className="bg-slate-800 text-white border border-slate-600 rounded px-3 py-2 text-sm font-bold shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
-        >
-          {SEMANTIC_NODES.map(node => (
-            <option key={node} value={node}>{node === "All" ? "🌍 Global Feed" : node}</option>
-          ))}
-        </select>
-      </div>
-
-      <MapContainer center={[19.0760, 72.8777]} zoom={10} attributionControl={false} style={{ height: "100%", width: "100%" }} className="bg-slate-900 rounded-lg">
+    <div className="w-full h-full relative z-0">
+      <MapContainer center={[19.0760, 72.8777]} zoom={10} attributionControl={false} style={{ height: "100%", width: "100%" }} className="bg-background rounded-lg">
         <TileLayer url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png" />
         <MarkerClusterGroup chunkedLoading>
           {reports.map(report => {
@@ -143,49 +120,49 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
             return (
               <Marker key={report.id} position={[report.latitude, report.longitude]} icon={getIcon(report.status)}>
                 <Popup autoPan={false} className="custom-popup leaflet-popup-override">
-                  <div className="p-3 pt-5 w-64 bg-white rounded-lg pointer-events-auto">
-                    <div className="flex justify-between items-start border-b border-slate-200 pb-2 mb-2">
-                      <span className="font-bold text-slate-800 uppercase tracking-widest text-[9px] bg-slate-100 px-2 py-1 rounded shadow-sm border border-slate-200">
+                  <div className="p-3 pt-5 w-64 bg-card rounded-lg pointer-events-auto border border-border/50 shadow-xl">
+                    <div className="flex justify-between items-start border-b border-border/50 pb-2 mb-2">
+                      <span className="font-bold text-foreground uppercase tracking-widest text-[9px] bg-background px-2 py-1 rounded shadow-sm border border-border/50">
                         {report.semantic_node}
                       </span>
-                      <span className={`text-[9px] uppercase font-bold px-2 py-1 rounded shadow-sm border ${report.status === 'dispatched' ? 'bg-amber-100 text-amber-700 border-amber-200' : report.status === 'resolved' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-red-100 text-red-700 border-red-200'}`}>
+                      <span className={`text-[9px] uppercase font-bold px-2 py-1 rounded shadow-sm border ${report.status === 'dispatched' ? 'bg-amber-500/20 text-amber-500 border-amber-500/30' : report.status === 'resolved' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'}`}>
                         {report.status || 'critical'}
                       </span>
                     </div>
 
-                    <h3 className="font-black text-[15px] leading-tight mb-2 text-slate-900">{report.problem_title}</h3>
+                    <h3 className="font-black text-[15px] leading-tight mb-2 text-foreground">{report.problem_title}</h3>
                     
                     {/* Phase 12 Database Mapping Hotfix */}
-                    <div className="max-h-32 overflow-y-auto pr-2 mb-3 text-slate-700 text-xs leading-relaxed border-l-2 border-slate-300 pl-2">
+                    <div className="max-h-32 overflow-y-auto pr-2 mb-3 text-muted-foreground text-xs leading-relaxed border-l-2 border-border/50 pl-2">
                       <p className="text-sm font-medium">{report.original_text || 'No field description recorded.'}</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 mb-3">
-                      <div className="bg-slate-50 border border-slate-200 p-1.5 rounded text-center shadow-sm">
-                        <span className="block text-[9px] text-slate-400 uppercase font-black tracking-wider">Urgency</span>
-                        <span className="text-[13px] font-black text-rose-600">{report.urgency_rating || 'N/A'}<span className="text-[10px] text-slate-400">/10</span></span>
+                      <div className="bg-background border border-border/50 p-1.5 rounded text-center shadow-sm">
+                        <span className="block text-[9px] text-muted-foreground uppercase font-black tracking-wider">Urgency</span>
+                        <span className="text-[13px] font-black text-rose-500">{report.urgency_rating || 'N/A'}<span className="text-[10px] text-muted-foreground">/10</span></span>
                       </div>
-                      <div className="bg-slate-50 border border-slate-200 p-1.5 rounded text-center shadow-sm">
-                        <span className="block text-[9px] text-slate-400 uppercase font-black tracking-wider">Impact</span>
-                        <span className="text-[13px] font-black text-rose-600">{report.importance_rating || 'N/A'}<span className="text-[10px] text-slate-400">/10</span></span>
+                      <div className="bg-background border border-border/50 p-1.5 rounded text-center shadow-sm">
+                        <span className="block text-[9px] text-muted-foreground uppercase font-black tracking-wider">Impact</span>
+                        <span className="text-[13px] font-black text-rose-500">{report.importance_rating || 'N/A'}<span className="text-[10px] text-muted-foreground">/10</span></span>
                       </div>
-                      <div className="col-span-2 bg-slate-50 border border-slate-200 p-1.5 rounded text-center shadow-sm">
-                        <span className="block text-[9px] text-slate-400 uppercase font-black tracking-wider">AI Deduplication Engine</span>
-                        <span className="text-[11px] font-black tracking-widest text-indigo-600 uppercase pt-0.5 inline-block">{report.is_duplicate ? 'Confirmed Duplicate' : 'Original Event Node'}</span>
+                      <div className="col-span-2 bg-background border border-border/50 p-1.5 rounded text-center shadow-sm">
+                        <span className="block text-[9px] text-muted-foreground uppercase font-black tracking-wider">AI Deduplication Engine</span>
+                        <span className="text-[11px] font-black tracking-widest text-indigo-400 uppercase pt-0.5 inline-block">{report.is_duplicate ? 'Confirmed Duplicate' : 'Original Event Node'}</span>
                       </div>
                     </div>
                     
                     {report.image_base64 && (
                       <div className="mt-3">
-                        <img src={report.image_base64} alt="Report image" className="w-full h-24 object-cover rounded border border-slate-200" />
+                        <img src={report.image_base64} alt="Report image" className="w-full h-24 object-cover rounded border border-border/50" />
                       </div>
                     )}
 
                     {total_dispatched > 0 && report.status !== 'resolved' && (
-                      <div className="mt-3 text-center bg-emerald-50 py-2 rounded border border-emerald-200 shadow-sm">
-                         <span className="block text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Active Operatives</span>
-                         <span className="text-xl font-black text-emerald-800">{total_accepted} <span className="text-emerald-600/50 text-sm">/ {total_dispatched}</span></span>
-                         <span className="block text-[9px] text-emerald-600/70 uppercase">Volunteers Responded</span>
+                      <div className="mt-3 text-center bg-emerald-500/10 py-2 rounded border border-emerald-500/20 shadow-sm">
+                         <span className="block text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Active Operatives</span>
+                         <span className="text-xl font-black text-emerald-500">{total_accepted} <span className="text-emerald-500/50 text-sm">/ {total_dispatched}</span></span>
+                         <span className="block text-[9px] text-emerald-400/70 uppercase">Volunteers Responded</span>
                       </div>
                     )}
 
@@ -200,7 +177,7 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
                         <button 
                           onClick={() => handleDispatch(report)}
                           disabled={report.status === 'dispatched'}
-                          className={`w-full mt-3 font-bold tracking-wide text-[11px] uppercase py-2.5 rounded shadow-sm transition-colors ${report.status === 'dispatched' ? 'bg-amber-500 text-white cursor-not-allowed' : 'bg-rose-600 hover:bg-slate-800 text-white'}`}
+                          className={`w-full mt-3 font-bold tracking-wide text-[11px] uppercase py-2.5 rounded shadow-sm transition-colors ${report.status === 'dispatched' ? 'bg-amber-500/50 text-white cursor-not-allowed border border-amber-500/50' : 'bg-rose-600 hover:bg-rose-500 text-white border border-rose-500/50'}`}
                         >
                           {report.status === 'dispatched' ? "Dispatch More Teams" : "Authorize Dispatch"}
                         </button>
@@ -208,7 +185,7 @@ export default function MapComponent({ filterNode }: { filterNode?: string }) {
                         {report.status === 'dispatched' && (
                           <button 
                             onClick={() => handleResolve(report.id)}
-                            className="w-full mt-2 font-black tracking-wide text-[12px] uppercase py-2 rounded shadow-lg bg-emerald-500 hover:bg-emerald-600 text-white transition-colors border-2 border-emerald-600"
+                            className="w-full mt-2 font-black tracking-wide text-[12px] uppercase py-2 rounded shadow-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-colors border border-emerald-500/50"
                           >
                             ✔ MARK RESOLVED
                           </button>

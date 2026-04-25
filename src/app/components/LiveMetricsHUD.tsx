@@ -28,15 +28,15 @@ export default function LiveMetricsHUD() {
 
   return (
     <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6 z-10 relative">
-      <div className="bg-slate-900 border-b-4 border-rose-500 p-4 rounded-xl shadow-2xl text-center">
+      <div className="bg-background/50 border border-border/50 border-b-4 border-b-rose-500 p-4 rounded-xl shadow-lg text-center backdrop-blur-sm">
         <h3 className="text-rose-500 text-[10px] md:text-xs font-black uppercase tracking-widest mb-1">Active Crises</h3>
         <span className="text-3xl md:text-5xl font-black text-rose-100">{metrics.active}</span>
       </div>
-      <div className="bg-slate-900 border-b-4 border-amber-500 p-4 rounded-xl shadow-2xl text-center">
+      <div className="bg-background/50 border border-border/50 border-b-4 border-b-amber-500 p-4 rounded-xl shadow-lg text-center backdrop-blur-sm">
         <h3 className="text-amber-500 text-[10px] md:text-xs font-black uppercase tracking-widest mb-1">Dispatched</h3>
         <span className="text-3xl md:text-5xl font-black text-amber-100">{metrics.dispatched}</span>
       </div>
-      <div className="bg-slate-900 border-b-4 border-emerald-500 p-4 rounded-xl shadow-2xl text-center">
+      <div className="bg-background/50 border border-border/50 border-b-4 border-b-emerald-500 p-4 rounded-xl shadow-lg text-center backdrop-blur-sm">
         <h3 className="text-emerald-500 text-[10px] md:text-xs font-black uppercase tracking-widest mb-1">Resolved</h3>
         <span className="text-3xl md:text-5xl font-black text-emerald-100">{metrics.resolved}</span>
       </div>
