@@ -134,9 +134,9 @@ export default function Home() {
                 <div className="bg-primary/10 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                   <DatabaseZap className="text-primary w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-foreground">AI Deduplication</h3>
+                <h3 className="text-xl font-bold mb-3 text-foreground">Smart Report Filtering</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Our system instantly cross-references incoming field reports, stripping out duplicate noise so relief coordinators can focus on verified crises.
+                  Our system instantly cross-references incoming field reports, filtering duplicate reports so relief coordinators can focus on verified crises.
                 </p>
               </Card>
 

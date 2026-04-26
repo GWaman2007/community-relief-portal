@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // MULTIMODAL AI GATEKEEPER
+    // Smart Classification Pipeline
     if (image_base64) {
       const match = image_base64.match(/^data:(image\/[a-zA-Z+.-]+);base64,(.*)$/);
       if (match) {
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
           try {
             const analysis = JSON.parse(gkRaw);
             if (analysis.is_valid === false) {
-              return NextResponse.json({ error: `AI Moderation Failed: ${analysis.rejection_reason || "Junk image detected."}` }, { status: 400 });
+              return NextResponse.json({ error: `Classification Failed: ${analysis.rejection_reason || "Junk image detected."}` }, { status: 400 });
             }
           } catch (e) {
              console.error("Gatekeeper parse failed", e);
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     }
 
     // 2. Prepare payload for Gemini
-    const prompt = `You are an AI deduplication and classification engine for NGO field reports.
+    const prompt = `You are a smart report classification assistant for NGO field reports.
 Analyze the following new report and compare it to the nearby reports provided as context.
 
 CRITICAL INSTRUCTION: You MUST output ONLY a raw, valid JSON object. Do NOT include any conversational text, markdown blocks, reasoning, or chain of thought before or after the JSON.

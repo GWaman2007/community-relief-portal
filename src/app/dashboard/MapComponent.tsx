@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { supabase } from "@/lib/supabaseClient";
 
-// Custom Icon Setup globally defining deterministic dynamic statuses
+// Custom icons for different report statuses
 const criticalIcon = new L.Icon({
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34]
@@ -25,7 +25,7 @@ const getIcon = (status: string) => {
   return criticalIcon;
 };
 
-export default function MapComponent({ filterNode = "All" }: { filterNode?: string }) {
+export default function MapComponent({ filterCategory = "All", filterNode }: { filterCategory?: string; filterNode?: string }) {
   const [reports, setReports] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -37,20 +37,22 @@ export default function MapComponent({ filterNode = "All" }: { filterNode?: stri
     fetchAuth();
 
     async function fetchReports() {
-      // Data Cascade: Safely load all geographic nodes via Left Join evaluating authorization post-query protecting legacy testing nodes
+      // Filter to only authorized NGOs
       let query = supabase
         .from("reports")
         .select("*, notifications(*), ngos(is_authorized)")
         .order("created_at", { ascending: false });
 
-      if (filterNode && filterNode !== "All") {
-        query = query.eq("semantic_node", filterNode);
+      // Support both prop names for backward compatibility
+      const filter = filterNode || filterCategory;
+      if (filter && filter !== "All") {
+        query = query.eq("semantic_node", filter);
       }
       
-      const { data, error } = await query;
+     const { data, error } = await query;
       if (!error && data) {
-        // Fallback Javascript Data Cascade resolving NULL structures globally
-        const safeReports = data.filter(r => !r.ngo_id || r.ngos?.is_authorized);
+         // Filter to only authorized NGOs
+         const safeReports = data.filter(r => !r.ngo_id || r.ngos?.is_authorized);
         setReports(safeReports);
       }
     }
@@ -64,7 +66,7 @@ export default function MapComponent({ filterNode = "All" }: { filterNode?: stri
       supabase.removeChannel(channel1);
       supabase.removeChannel(channel2);
     };
-  }, [filterNode]);
+  }, [filterCategory, filterNode]);
 
   const handleDispatch = async (report: any) => {
     try {
@@ -125,15 +127,15 @@ export default function MapComponent({ filterNode = "All" }: { filterNode?: stri
                       <span className="font-bold text-foreground uppercase tracking-widest text-[9px] bg-background px-2 py-1 rounded shadow-sm border border-border/50">
                         {report.semantic_node}
                       </span>
-                      <span className={`text-[9px] uppercase font-bold px-2 py-1 rounded shadow-sm border ${report.status === 'dispatched' ? 'bg-amber-500/20 text-amber-500 border-amber-500/30' : report.status === 'resolved' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'}`}>
-                        {report.status || 'critical'}
-                      </span>
+                       <span className={`text-[9px] uppercase font-bold px-2 py-1 rounded shadow-sm border ${report.status === 'dispatched' ? 'bg-amber-500/20 text-amber-500 border-amber-500/30' : report.status === 'resolved' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'}`}>
+                          {report.status || 'waiting'}
+                        </span>
                     </div>
 
                     <h3 className="font-black text-[15px] leading-tight mb-2 text-foreground">{report.problem_title}</h3>
-                    
-                    {/* Phase 12 Database Mapping Hotfix */}
-                    <div className="max-h-32 overflow-y-auto pr-2 mb-3 text-muted-foreground text-xs leading-relaxed border-l-2 border-border/50 pl-2">
+                     
+                     {/* Report description from original submission */}
+                      <div className="max-h-32 overflow-y-auto pr-2 mb-3 text-muted-foreground text-xs leading-relaxed border-l-2 border-border/50 pl-2">
                       <p className="text-sm font-medium">{report.original_text || 'No field description recorded.'}</p>
                     </div>
 
@@ -147,7 +149,7 @@ export default function MapComponent({ filterNode = "All" }: { filterNode?: stri
                         <span className="text-[13px] font-black text-rose-500">{report.importance_rating || 'N/A'}<span className="text-[10px] text-muted-foreground">/10</span></span>
                       </div>
                       <div className="col-span-2 bg-background border border-border/50 p-1.5 rounded text-center shadow-sm">
-                        <span className="block text-[9px] text-muted-foreground uppercase font-black tracking-wider">AI Deduplication Engine</span>
+                        <span className="block text-[9px] text-muted-foreground uppercase font-black tracking-wider">Smart Report Filtering</span>
                         <span className="text-[11px] font-black tracking-widest text-indigo-400 uppercase pt-0.5 inline-block">{report.is_duplicate ? 'Confirmed Duplicate' : 'Original Event Report'}</span>
                       </div>
                     </div>
@@ -159,18 +161,18 @@ export default function MapComponent({ filterNode = "All" }: { filterNode?: stri
                     )}
 
                     {total_dispatched > 0 && report.status !== 'resolved' && (
-                      <div className="mt-3 text-center bg-emerald-500/10 py-2 rounded border border-emerald-500/20 shadow-sm">
-                         <span className="block text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Active Volunteers</span>
-                         <span className="text-xl font-black text-emerald-500">{total_accepted} <span className="text-emerald-500/50 text-sm">/ {total_dispatched}</span></span>
-                         <span className="block text-[9px] text-emerald-400/70 uppercase">Volunteers Responded</span>
-                      </div>
-                    )}
+                        <div className="mt-3 text-center bg-emerald-500/10 py-2 rounded border border-emerald-500/20 shadow-sm">
+                           <span className="block text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Volunteer Response</span>
+                           <span className="text-xl font-black text-emerald-500">{total_accepted} <span className="text-emerald-500/50 text-sm">/ {total_dispatched}</span></span>
+                           <span className="block text-[9px] text-emerald-400/70 uppercase">Volunteers on Site</span>
+                        </div>
+                     )}
 
                     {report.status === 'resolved' && (
-                      <div className="mt-3 text-center bg-emerald-600 p-2 rounded shadow-sm text-white font-black tracking-widest uppercase text-[12px]">
-                        ✔ CRISIS RESOLVED & VERIFIED
-                      </div>
-                    )}
+                        <div className="mt-3 text-center bg-emerald-600 p-2 rounded shadow-sm text-white font-black tracking-widest uppercase text-[12px]">
+                          ✔ RESOLVED
+                        </div>
+                     )}
 
                     {isAdmin && report.status !== 'resolved' && (
                       <>

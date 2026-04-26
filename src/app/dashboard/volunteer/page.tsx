@@ -62,8 +62,8 @@ export default function VolunteerDashboard() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-orange-500/10 blur-[150px]" />
           </div>
           <Card className="bg-card/60 backdrop-blur-xl border-destructive/20 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 z-10 max-w-lg w-full text-center py-10 px-6">
-            <h1 className="text-3xl font-black text-destructive tracking-tight flex items-center justify-center gap-2 mb-4">🤖 AI Screening Failed</h1>
-            <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-4">Our automated vetting system has flagged your profile. An administrator may still manually approve your access.</p>
+            <h1 className="text-3xl font-black text-destructive tracking-tight flex items-center justify-center gap-2 mb-4">🤖 Profile Review Pending</h1>
+            <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-4">Our review team is checking your profile. An administrator may still manually approve your access.</p>
             <div className="bg-background/50 border border-border/50 p-4 rounded-lg text-sm text-muted-foreground mb-8">
               {profile.rejection_reason || "No additional details provided."}
             </div>
@@ -79,8 +79,8 @@ export default function VolunteerDashboard() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-amber-500/10 blur-[150px]" />
         </div>
         <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 z-10 max-w-lg w-full text-center py-10 px-6">
-          <h1 className="text-3xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 mb-4">⏳ AI Review In Progress</h1>
-          <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-8">Our AI screening system is currently reviewing your volunteer profile. This process is usually instant — please refresh in a few seconds.</p>
+          <h1 className="text-3xl font-black text-foreground tracking-tight flex items-center justify-center gap-2 mb-4">⏳ Profile Under Review</h1>
+          <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-8">Our team is reviewing your volunteer profile. This process is usually instant — please refresh in a few seconds.</p>
           <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-muted-foreground hover:text-foreground border-border/50 hover:bg-accent/50">Return to Hub</Button>
         </Card>
       </div>
@@ -120,7 +120,7 @@ export default function VolunteerDashboard() {
            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col">
              <CardHeader className="pb-4">
                <CardTitle className="text-primary flex items-center gap-2 text-sm uppercase tracking-widest">
-                 <MapPin className="w-4 h-4" /> Global Heatmap Sensor
+                 <MapPin className="w-4 h-4" /> Global Activity Map
                </CardTitle>
              </CardHeader>
              <CardContent className="p-0 flex-1 relative min-h-[400px]">
@@ -133,7 +133,7 @@ export default function VolunteerDashboard() {
                 <Inbox className="w-16 h-16" />
               </div>
               <h2 className="text-foreground font-black text-2xl mb-2">Secure Dispatch Inbox</h2>
-              <p className="text-muted-foreground text-sm mb-8 leading-relaxed max-w-sm">Access your targeted geographic alerts when the AI algorithm matches your specific skills to an active sector incident.</p>
+              <p className="text-muted-foreground text-sm mb-8 leading-relaxed max-w-sm">Access your targeted geographic alerts when we match your skills to active incidents nearby.</p>
               <Button onClick={() => router.push("/inbox")} size="lg" className="w-full max-w-md bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-14 shadow-lg shadow-primary/20 transition-all uppercase tracking-widest">
                 Open Secure Inbox
               </Button>

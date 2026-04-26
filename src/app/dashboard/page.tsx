@@ -29,6 +29,7 @@ const SEMANTIC_NODES = [
 ];
 
 export default function DashboardPage() {
+  const [filterCategory, setFilterCategory] = useState("All");
   const [filterNode, setFilterNode] = useState("All");
 
   return (
@@ -36,7 +37,7 @@ export default function DashboardPage() {
       
       {/* Absolute Full-Screen Map */}
       <div className="absolute inset-0 z-0">
-        <MapComponent filterNode={filterNode} />
+         <MapComponent filterNode={filterNode} />
       </div>
 
       {/* Floating Header */}
@@ -55,27 +56,27 @@ export default function DashboardPage() {
             </Link>
             <div>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight flex items-center gap-2">
-                <MapIcon className="w-6 h-6 text-emerald-500" />
-                AI Deduplication Engine
+               <MapIcon className="w-6 h-6 text-emerald-500" />
+                 Smart Report Hub
               </h1>
               <p className="text-sm text-muted-foreground">Real-time NGO field reports visualization</p>
             </div>
           </div>
           
           <div className="flex items-center gap-3 bg-background/50 border border-border/50 rounded-xl p-1.5 shadow-inner">
-            <div className="bg-emerald-500/10 p-2 rounded-lg text-emerald-400">
-              <Filter className="w-4 h-4" />
-            </div>
-            <select 
-              value={filterNode}
-              onChange={(e) => setFilterNode(e.target.value)}
-              className="bg-transparent text-sm font-medium text-foreground py-1 pr-6 focus:outline-none cursor-pointer appearance-none"
-            >
-              {SEMANTIC_NODES.map((node) => (
-                <option key={node} value={node} className="bg-card text-foreground">{node}</option>
-              ))}
-            </select>
-          </div>
+             <div className="bg-emerald-500/10 p-2 rounded-lg text-emerald-400">
+               <Filter className="w-4 h-4" />
+             </div>
+             <select 
+               value={filterCategory}
+               onChange={(e) => setFilterCategory(e.target.value)}
+               className="bg-transparent text-sm font-medium text-foreground py-1 pr-6 focus:outline-none cursor-pointer appearance-none"
+             >
+               {SEMANTIC_NODES.map((node) => (
+                 <option key={node} value={node} className="bg-card text-foreground">{node}</option>
+               ))}
+             </select>
+           </div>
         </Card>
       </motion.div>
     </div>

@@ -140,7 +140,7 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-96 overflow-y-auto">
               <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
-                <CardTitle className="text-primary">NGO Trust Architecture</CardTitle>
+                <CardTitle className="text-primary">NGO Partners</CardTitle>
               </CardHeader>
               <CardContent className="p-4">
                 <table className="w-full text-left border-collapse table-fixed">
@@ -195,14 +195,14 @@ export default function AdminDashboard() {
 
             <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-96 overflow-y-auto">
               <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
-                <CardTitle className="text-primary">AI Volunteer Verification</CardTitle>
+                <CardTitle className="text-primary">Volunteer Verification</CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-3">
                 {volunteers.map(v => (
                   <div key={v.id} className="bg-background/50 border border-border/50 p-3 rounded-xl flex items-center justify-between shadow-sm">
                     <div>
                       <h3 className="font-semibold text-sm flex items-center gap-1">{v.name}</h3>
-                      {v.rejection_reason && <p className="text-xs text-destructive leading-tight my-1">AI Output: {v.rejection_reason}</p>}
+                      {v.rejection_reason && <p className="text-xs text-destructive leading-tight my-1">Reason: {v.rejection_reason}</p>}
                       <span className={`text-[10px] uppercase font-bold px-2 py-0.5 mt-1 inline-block rounded ${v.is_authorized ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'}`}>{v.is_authorized ? "Verified" : "Flagged"}</span>
                     </div>
                     <Button 

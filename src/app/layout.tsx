@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "EarthNode Command | Community Relief Portal",
-  description: "Autonomous AI Deduplication & Real-Time Geospatial Volunteer Routing.",
+  description: "Smart Report Verification & Real-Time Volunteer Routing.",
 };
 
 export default function RootLayout({
