@@ -2,7 +2,7 @@
 
 import { Suspense, lazy } from "react";
 import Link from "next/link";
-import { ShieldAlert, ArrowRight, Activity } from "lucide-react";
+import { ShieldAlert, ArrowRight, Activity, Users, MapPin, DatabaseZap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -63,9 +63,15 @@ export default function Home() {
 
               {/* Connected Nodes - CSS rotation only uses transform (GPU composited) */}
               <div className="absolute inset-0 z-10 animate-[spin_30s_linear_infinite]">
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md" />
-                <div className="absolute bottom-6 right-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md" />
-                <div className="absolute bottom-6 left-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md" />
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
+                  <Users className="w-4 h-4 text-primary" />
+                </div>
+                <div className="absolute bottom-6 right-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
+                  <MapPin className="w-4 h-4 text-primary" />
+                </div>
+                <div className="absolute bottom-6 left-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
+                  <DatabaseZap className="w-4 h-4 text-primary" />
+                </div>
               </div>
             </div>
 
