@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowLeft, MapPin, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";

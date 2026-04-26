@@ -121,3 +121,32 @@
   top: 10px !important;
   right: 10px !important;
 }
+
+/* ===== PERFORMANCE: GPU-composited hero animation ===== */
+/* Uses ONLY transform + opacity (compositor-friendly properties) */
+/* This replaces the framer-motion JS animation for the LCP element */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== PERFORMANCE: Promote animated elements to GPU layer ===== */
+/* Prevents forced reflows by keeping animations on the compositor thread */
+.animate-ping,
+.animate-pulse,
+.animate-spin {
+  will-change: transform, opacity;
+  contain: layout style;
+}
+
+/* ===== PERFORMANCE: Isolate heavy layout sections ===== */
+/* contain:layout prevents child layout changes from triggering parent reflow */
+.leaflet-container {
+  contain: strict;
+}
