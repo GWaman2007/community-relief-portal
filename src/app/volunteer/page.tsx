@@ -109,7 +109,7 @@ export default function VolunteerSignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
       
       {/* Background Effects */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -196,7 +196,7 @@ export default function VolunteerSignUp() {
                     <p className="text-xs text-center mt-3 text-muted-foreground">{locationStatus}</p>
                   )}
                   {latitude && longitude && (
-                    <p className="text-xs text-center mt-1 font-mono text-emerald-400">
+                    <p className="text-xs text-center mt-1 text-emerald-400">
                       {latitude.toFixed(6)}, {longitude.toFixed(6)}
                     </p>
                   )}

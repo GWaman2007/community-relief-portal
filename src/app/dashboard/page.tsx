@@ -8,7 +8,15 @@ import { ArrowLeft, Map as MapIcon, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-const MapComponent = dynamic(() => import("./MapComponent"), { ssr: false });
+const MapComponent = dynamic(() => import("./MapComponent"), { 
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center bg-card/40 rounded-xl">
+      <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
+      <p className="text-muted-foreground text-sm font-medium animate-pulse tracking-widest uppercase">Initializing Map...</p>
+    </div>
+  )
+});
 
 const SEMANTIC_NODES = [
   "All",

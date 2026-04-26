@@ -131,7 +131,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
       
       {/* Background Effects */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -265,7 +265,7 @@ export default function RegisterPage() {
           </CardContent>
           <CardFooter className="justify-center border-t border-border/40 py-6">
             <div className="text-sm text-muted-foreground">
-              Already have an account? <Link href="/login" className="text-primary hover:text-primary/80 font-semibold transition-colors">Sign In</Link>
+              Already have an account? <Link href="/login" className="text-primary hover:text-primary font-semibold hover:underline transition-colors">Sign In</Link>
             </div>
           </CardFooter>
         </Card>

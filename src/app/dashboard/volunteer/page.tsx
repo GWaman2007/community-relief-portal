@@ -8,7 +8,15 @@ import { ArrowLeft, Inbox, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
-const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), { ssr: false });
+const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), { 
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center bg-card/40 rounded-xl">
+      <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
+      <p className="text-muted-foreground text-sm font-medium animate-pulse tracking-widest uppercase">Initializing Map...</p>
+    </div>
+  )
+});
 
 export default function VolunteerDashboard() {
   const router = useRouter();
@@ -41,7 +49,7 @@ export default function VolunteerDashboard() {
           <Card className="bg-card/60 backdrop-blur-xl border-destructive/20 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 z-10 max-w-lg w-full text-center py-10 px-6">
             <h1 className="text-3xl font-black text-destructive tracking-tight flex items-center justify-center gap-2 mb-4">⚠️ Access Revoked</h1>
             <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-8">Your volunteer privileges have been explicitly suspended by the Platform Administrator. Please contact the admin directly regarding your access.</p>
-            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-destructive hover:text-destructive/80 border-destructive/30 hover:bg-destructive/10">Sign Out</Button>
+            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-destructive hover:text-destructive-foreground border-destructive/30 hover:bg-destructive">Sign Out</Button>
           </Card>
         </div>
       );
@@ -56,10 +64,10 @@ export default function VolunteerDashboard() {
           <Card className="bg-card/60 backdrop-blur-xl border-destructive/20 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 z-10 max-w-lg w-full text-center py-10 px-6">
             <h1 className="text-3xl font-black text-destructive tracking-tight flex items-center justify-center gap-2 mb-4">🤖 AI Screening Failed</h1>
             <p className="text-muted-foreground leading-relaxed font-medium tracking-wide mb-4">Our automated vetting system has flagged your profile. An administrator may still manually approve your access.</p>
-            <div className="bg-background/50 border border-border/50 p-4 rounded-lg text-sm font-mono text-muted-foreground mb-8">
+            <div className="bg-background/50 border border-border/50 p-4 rounded-lg text-sm text-muted-foreground mb-8">
               {profile.rejection_reason || "No additional details provided."}
             </div>
-            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-destructive hover:text-destructive/80 border-destructive/30 hover:bg-destructive/10">Sign Out</Button>
+            <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); router.push('/') }} className="text-destructive hover:text-destructive-foreground border-destructive/30 hover:bg-destructive">Sign Out</Button>
           </Card>
         </div>
       );
@@ -80,7 +88,7 @@ export default function VolunteerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col relative overflow-hidden font-sans p-6">
+    <div className="min-h-screen bg-background flex flex-col relative overflow-hidden p-6">
       
       {/* Background Effects */}
       <div className="absolute inset-0 z-0 pointer-events-none">

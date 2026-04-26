@@ -9,7 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), { ssr: false });
+const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), { 
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center bg-card/40 rounded-xl">
+      <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
+      <p className="text-muted-foreground text-sm font-medium animate-pulse tracking-widest uppercase">Initializing Map...</p>
+    </div>
+  )
+});
 
 export default function Home() {
   return (
@@ -68,13 +76,13 @@ export default function Home() {
               {/* Connected Nodes */}
               <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute inset-0 z-10">
                 <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
-                  <Users className="w-4 h-4 text-primary/80" />
+                  <Users className="w-4 h-4 text-primary" />
                 </div>
                 <div className="absolute bottom-6 right-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
-                  <MapPin className="w-4 h-4 text-primary/80" />
+                  <MapPin className="w-4 h-4 text-primary" />
                 </div>
                 <div className="absolute bottom-6 left-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
-                  <DatabaseZap className="w-4 h-4 text-primary/80" />
+                  <DatabaseZap className="w-4 h-4 text-primary" />
                 </div>
               </motion.div>
             </div>
