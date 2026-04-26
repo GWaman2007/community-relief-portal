@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import { ArrowLeft, ShieldAlert, MapPin, Search } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
@@ -139,7 +139,7 @@ export default function RegisterPage() {
         <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px]" />
       </div>
 
-      <div className="z-10 absolute top-6 left-6">
+      <div className="z-20 absolute top-6 left-6">
         <Link href="/">
           <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4" /> Return to Hub
@@ -147,11 +147,8 @@ export default function RegisterPage() {
         </Link>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full max-w-xl z-10 py-12"
+      <div
+        className="w-full max-w-xl z-10 py-12 animate-[slideUp_0.5s_ease-out_both]"
       >
         <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300">
           <CardHeader className="text-center space-y-2 pt-8">
@@ -269,7 +266,7 @@ export default function RegisterPage() {
             </div>
           </CardFooter>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import { ArrowLeft, MapPin, Search, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -117,7 +117,7 @@ export default function VolunteerSignUp() {
         <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[150px]" />
       </div>
 
-      <div className="z-10 absolute top-6 left-6">
+      <div className="z-20 absolute top-6 left-6">
         <Link href="/">
           <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4" /> Return to Hub
@@ -125,11 +125,8 @@ export default function VolunteerSignUp() {
         </Link>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full max-w-lg z-10 py-12"
+      <div
+        className="w-full max-w-lg z-10 py-12 animate-[slideUp_0.5s_ease-out_both]"
       >
         <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl shadow-emerald-900/10">
           <CardHeader className="text-center space-y-2 pt-8">
@@ -230,7 +227,7 @@ export default function VolunteerSignUp() {
             </form>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 }

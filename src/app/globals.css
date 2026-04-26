@@ -134,3 +134,13 @@
 .leaflet-container {
   contain: strict;
 }
+
+/* Dashboard header slides down from above viewport */
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

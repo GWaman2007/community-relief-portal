@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import { ArrowLeft, Inbox as InboxIcon, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -107,7 +107,7 @@ export default function VolunteerInbox() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] rounded-full bg-indigo-500/10 blur-[120px]" />
       </div>
 
-      <div className="z-10 absolute top-6 left-6">
+      <div className="z-20 absolute top-6 left-6">
         <Link href="/dashboard/volunteer">
           <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4" /> Return to Hub
@@ -138,12 +138,10 @@ export default function VolunteerInbox() {
               </div>
             ) : (
               notifications.map((n, i) => (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                <div 
                   key={n.id} 
-                  className={`border p-5 rounded-xl transition-all shadow-sm ${!n.status || n.status === 'pending' ? 'bg-background/80 border-primary/30 border-l-4 border-l-primary' : 'bg-background/30 border-border/50'}`}
+                  className={`border p-5 rounded-xl transition-colors shadow-sm animate-[slideUp_0.4s_ease-out_both] ${!n.status || n.status === 'pending' ? 'bg-background/80 border-primary/30 border-l-4 border-l-primary' : 'bg-background/30 border-border/50'}`}
+                  style={{ animationDelay: `${i * 80}ms` }}
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h4 className={`font-bold text-sm flex items-center gap-2 ${(!n.status || n.status === 'pending') ? 'text-primary' : 'text-muted-foreground'}`}>
@@ -167,7 +165,7 @@ export default function VolunteerInbox() {
                       {n.status === 'accept' ? <span className="text-primary flex items-center gap-2"><CheckCircle className="w-4 h-4" /> You accepted this task.</span> : <span className="text-muted-foreground flex items-center gap-2"><XCircle className="w-4 h-4" /> You declined this incident.</span>}
                     </div>
                   )}
-                </motion.div>
+                </div>
               ))
             )}
           </CardContent>

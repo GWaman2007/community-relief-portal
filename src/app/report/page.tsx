@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import { ArrowLeft, MapPin, Search, UploadCloud, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -150,7 +150,7 @@ export default function FieldPortal() {
         <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] rounded-full bg-blue-500/10 blur-[120px]" />
       </div>
 
-      <div className="z-10 absolute top-6 left-6">
+      <div className="z-20 absolute top-6 left-6">
         <Link href="/dashboard/ngo">
           <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4" /> Return to Dashboard
@@ -158,11 +158,8 @@ export default function FieldPortal() {
         </Link>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full max-w-xl z-10 py-12"
+      <div
+        className="w-full max-w-xl z-10 py-12 animate-[slideUp_0.5s_ease-out_both]"
       >
         <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-2xl shadow-cyan-900/10">
           <CardHeader className="text-center space-y-2 pt-8">
@@ -268,7 +265,7 @@ export default function FieldPortal() {
             </form>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 }

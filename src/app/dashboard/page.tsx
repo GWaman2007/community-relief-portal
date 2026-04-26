@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import { ArrowLeft, Map as MapIcon, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,11 +31,8 @@ export default function DashboardPage() {
       </div>
 
       {/* Floating Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="z-20 w-full max-w-7xl mx-auto p-4 md:p-6"
+      <div 
+        className="z-20 w-full max-w-7xl mx-auto p-4 md:p-6 animate-[slideDown_0.5s_ease-out_both]"
       >
         <Card className="bg-card/40 backdrop-blur-xl border-border/50 shadow-2xl p-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
@@ -68,7 +65,7 @@ export default function DashboardPage() {
              </select>
            </div>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 }
