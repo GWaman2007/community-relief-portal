@@ -115,6 +115,7 @@ export default function MapComponent({ filterCategory = "All" }: { filterCategor
         <TileLayer url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png" />
         <MarkerClusterGroup 
           chunkedLoading
+          animate={false}
           iconCreateFunction={(cluster: any) => {
             return L.divIcon({
               html: `<span class="text-primary font-bold text-xl drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]">${cluster.getChildCount()}</span>`,

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
+import { m, LazyMotion, domAnimation } from "framer-motion";
 import { ArrowRight, ShieldAlert, Activity, Users, MapPin, DatabaseZap } from "lucide-react";
 import LiveMetricsHUD from "@/app/components/LiveMetricsHUD";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,8 @@ const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background flex flex-col relative overflow-hidden font-sans">
+    <LazyMotion features={domAnimation}>
+      <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
       
       {/* Background Effects */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -56,7 +57,7 @@ export default function Home() {
         <div className="max-w-6xl w-full">
           
           {/* Typographic & Glassmorphic Hero Section */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -74,7 +75,7 @@ export default function Home() {
               </div>
 
               {/* Connected Nodes */}
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute inset-0 z-10">
+              <m.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute inset-0 z-10">
                 <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
                   <Users className="w-4 h-4 text-primary" />
                 </div>
@@ -84,7 +85,7 @@ export default function Home() {
                 <div className="absolute bottom-6 left-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
                   <DatabaseZap className="w-4 h-4 text-primary" />
                 </div>
-              </motion.div>
+              </m.div>
             </div>
 
             <Badge variant="outline" className="mb-6 py-1.5 px-4 bg-primary/10 text-primary border-primary/20 text-sm font-medium tracking-wide rounded-full shadow-sm">
@@ -112,10 +113,10 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Persuasive About Us Section */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -160,10 +161,10 @@ export default function Home() {
                 </p>
               </Card>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Map Display Card */}
-          <motion.div
+          <m.div
             id="live-map"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -201,7 +202,7 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </m.div>
           
         </div>
       </main>
@@ -211,5 +212,6 @@ export default function Home() {
         <p>EarthNode © 2026. Community Relief Efforts Platform.</p>
       </footer>
     </div>
+    </LazyMotion>
   );
 }
