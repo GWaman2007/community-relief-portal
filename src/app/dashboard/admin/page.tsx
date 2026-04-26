@@ -128,7 +128,7 @@ export default function AdminDashboard() {
           </Card>
 
           <div className="space-y-6">
-            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-96 overflow-y-auto">
+            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300 h-96 overflow-y-auto">
               <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
                 <CardTitle className="text-primary">NGO Partners</CardTitle>
               </CardHeader>
@@ -162,7 +162,7 @@ export default function AdminDashboard() {
                                   });
                                   setNgos(prev => prev.map(n => n.id === ngo.id ? { ...n, is_authorized: false } : n));
                                 }}
-                                className="w-full max-w-[100px] bg-destructive/10 hover:bg-destructive border border-destructive/20 text-destructive hover:text-destructive-foreground px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-all"
+                                className="w-full max-w-[100px] bg-destructive/10 hover:bg-destructive border border-destructive/20 text-destructive hover:text-destructive-foreground px-2 py-1.5 rounded text-[10px] uppercase font-black tracking-widest transition-colors"
                               >
                                 Revoke
                               </button>
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-96 overflow-y-auto">
+            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300 h-96 overflow-y-auto">
               <CardHeader className="pb-4 sticky top-0 bg-card/80 backdrop-blur-md z-10 border-b border-border/50">
                 <CardTitle className="text-primary">Volunteer Verification</CardTitle>
               </CardHeader>

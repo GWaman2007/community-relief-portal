@@ -223,7 +223,7 @@ export default function VolunteerSignUp() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !latitude || !longitude || selectedSkills.length === 0 || !name}
-                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all disabled:opacity-50"
+                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-colors disabled:opacity-50"
               >
                 {isSubmitting ? "Registering..." : "Register as Volunteer"}
               </Button>

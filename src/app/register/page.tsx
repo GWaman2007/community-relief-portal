@@ -153,7 +153,7 @@ export default function RegisterPage() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="w-full max-w-xl z-10 py-12"
       >
-        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300">
           <CardHeader className="text-center space-y-2 pt-8">
             <div className="mx-auto bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
               <ShieldAlert className="w-6 h-6 text-primary" />
@@ -257,7 +257,7 @@ export default function RegisterPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-11 mt-4 transition-all"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-11 mt-4 transition-colors"
               >
                 {isSubmitting ? "Registering..." : "Register"}
               </Button>

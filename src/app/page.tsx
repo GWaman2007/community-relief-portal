@@ -1,27 +1,15 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ShieldAlert, ArrowRight, Activity, Users, MapPin, DatabaseZap } from "lucide-react";
+import { ShieldAlert, ArrowRight, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-// Load below-the-fold with ssr:false so the server skips it entirely
-const BelowTheFold = dynamic(() => import("@/app/components/BelowTheFold"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full flex flex-col items-center justify-center py-20">
-      <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
-      <p className="text-muted-foreground text-xs font-medium animate-pulse tracking-widest uppercase">Loading content...</p>
-    </div>
-  )
-});
+import HeroOrbit from "@/app/components/HeroOrbit";
+import BelowTheFoldLoader from "@/app/components/BelowTheFoldLoader";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
 
-      {/* Background Effects - pure CSS, no JS needed */}
+      {/* Background Effects - pure CSS, zero JS */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-500/10 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px]" />
@@ -53,42 +41,18 @@ export default function Home() {
       <main className="flex-1 flex flex-col items-center pt-32 pb-24 px-6 z-10 relative">
         <div className="max-w-6xl w-full">
 
-          {/* CRITICAL LCP SECTION — Pure CSS animations, no JS dependency */}
-          {/* Uses CSS @keyframes for fade-in so h1 renders immediately without waiting for framer-motion JS */}
-          <div
-            className="text-center mb-24 flex flex-col items-center animate-[slideUp_0.6s_ease-out_both]"
-          >
-            {/* Visual Anchor: Icon-driven Network Abstraction */}
-            <div className="relative w-48 h-48 mb-10 flex items-center justify-center">
-              {/* Outer Pulse Ring - uses only transform+opacity (GPU composited) */}
-              <div className="absolute inset-0 bg-primary/5 rounded-full animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]" />
-              <div className="absolute inset-4 bg-primary/10 rounded-full animate-pulse" />
-
-              {/* Central Hub */}
-              <div className="absolute w-20 h-20 bg-card/80 backdrop-blur-md border border-border/50 rounded-full flex items-center justify-center shadow-xl z-20">
-                <ShieldAlert className="w-8 h-8 text-primary" />
-              </div>
-
-              {/* Connected Nodes - CSS rotation only uses transform (GPU composited) */}
-              <div className="absolute inset-0 z-10 animate-[spin_30s_linear_infinite]">
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
-                  <Users className="w-4 h-4 text-primary" />
-                </div>
-                <div className="absolute bottom-6 right-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
-                  <MapPin className="w-4 h-4 text-primary" />
-                </div>
-                <div className="absolute bottom-6 left-2 w-10 h-10 bg-card/60 backdrop-blur-sm border border-border/30 rounded-full flex items-center justify-center shadow-md">
-                  <DatabaseZap className="w-4 h-4 text-primary" />
-                </div>
-              </div>
-            </div>
+          {/* CRITICAL LCP SECTION — Server-rendered HTML, pure CSS animation */}
+          <div className="text-center mb-24 flex flex-col items-center animate-[slideUp_0.6s_ease-out_both]">
+            
+            {/* Visual Anchor — Server Component */}
+            <HeroOrbit />
 
             <Badge variant="outline" className="mb-6 py-1.5 px-4 bg-primary/10 text-primary border-primary/20 text-sm font-medium tracking-wide rounded-full shadow-sm">
               <Activity className="w-4 h-4 mr-2 inline" />
               Live Relief Efforts
             </Badge>
 
-            {/* LCP ELEMENT — renders immediately, no JS blocking */}
+            {/* LCP ELEMENT — Server-rendered HTML, zero JS, full opacity */}
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 text-foreground max-w-4xl mx-auto leading-tight">
               Community <span className="text-primary">Relief Portal</span>
             </h1>
@@ -104,21 +68,21 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="#live-map" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full rounded-full px-8 h-14 font-bold bg-card/40 backdrop-blur-sm border-border hover:bg-card/80 text-lg">
+                <Button size="lg" variant="outline" className="w-full rounded-full px-8 h-14 font-bold bg-card/40 border-border hover:bg-card/80 text-lg">
                   View Live Map
                 </Button>
               </Link>
             </div>
           </div>
 
-          {/* BELOW THE FOLD — next/dynamic ssr:false, server skips rendering */}
-          <BelowTheFold />
+          {/* BELOW THE FOLD — Client-only wrapper (ssr:false) */}
+          <BelowTheFoldLoader />
 
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-border/40 py-8 text-center text-sm text-muted-foreground z-10 bg-background/80 backdrop-blur-lg">
+      <footer className="w-full border-t border-border/40 py-8 text-center text-sm text-muted-foreground z-10 bg-background/80">
         <p>EarthNode © 2026. Community Relief Efforts Platform.</p>
       </footer>
     </div>

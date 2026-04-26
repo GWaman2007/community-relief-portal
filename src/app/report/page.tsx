@@ -261,7 +261,7 @@ export default function FieldPortal() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !latitude || !longitude}
-                className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold h-12 transition-all disabled:opacity-50"
+                className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold h-12 transition-colors disabled:opacity-50"
               >
                 {isSubmitting ? "Transmitting..." : <><Send className="w-4 h-4 mr-2" /> Transmit Report</>}
               </Button>

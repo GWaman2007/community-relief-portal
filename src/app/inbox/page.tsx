@@ -155,10 +155,10 @@ export default function VolunteerInbox() {
                   
                   {(!n.status || n.status === 'pending') ? (
                     <div className="mt-5 flex gap-3">
-                      <Button onClick={() => handleResponse(n.id, 'accept')} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all shadow-lg hover:shadow-primary/20">
+                      <Button onClick={() => handleResponse(n.id, 'accept')} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-colors shadow-lg hover:shadow-primary/20">
                         <CheckCircle className="w-4 h-4 mr-2" /> Accept Assignment
                       </Button>
-                      <Button variant="outline" onClick={() => handleResponse(n.id, 'decline')} className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive-foreground transition-all">
+                      <Button variant="outline" onClick={() => handleResponse(n.id, 'decline')} className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive-foreground transition-colors">
                         <XCircle className="w-4 h-4 mr-2" /> Decline
                       </Button>
                     </div>

@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   experimental: {
     // Tree-shake heavy icon/animation libraries to purge unused JS
     optimizePackageImports: ['lucide-react', 'framer-motion', '@supabase/supabase-js'],
+    // Inline critical CSS into the HTML to eliminate render-blocking CSS requests
+    inlineCss: true,
   },
   images: {
     // Allow base64 data URIs for user-uploaded report images
