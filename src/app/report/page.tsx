@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "@/lib/supabaseClient";
@@ -204,9 +205,14 @@ export default function FieldPortal() {
                   </label>
                 </div>
                 {image && (
-                  <div className="mt-3 rounded-lg overflow-hidden border border-border/50 relative">
-                    <img src={image} alt="Preview" className="w-full h-auto object-cover max-h-48" />
-                    <button type="button" onClick={() => setImage(null)} className="absolute top-2 right-2 bg-red-600/90 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-red-700 transition-colors"><X className="w-4 h-4"/></button>
+                  <div className="mt-3 rounded-lg overflow-hidden border border-border/50 relative w-full h-48">
+                    <Image 
+                      src={image} 
+                      alt="Preview" 
+                      fill
+                      className="object-cover"
+                    />
+                    <button type="button" onClick={() => setImage(null)} className="absolute top-2 right-2 bg-red-600/90 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-red-700 transition-colors z-20"><X className="w-4 h-4"/></button>
                   </div>
                 )}
               </div>

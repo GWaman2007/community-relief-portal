@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
@@ -164,8 +165,13 @@ export default function MapComponent({ filterCategory = "All" }: { filterCategor
                     </div>
                     
                     {report.image_base64 && (
-                      <div className="mt-3">
-                        <img src={report.image_base64} alt="Report image" className="w-full h-24 object-cover rounded border border-border/50" />
+                      <div className="mt-3 relative w-full h-24 overflow-hidden rounded border border-border/50">
+                        <Image 
+                          src={report.image_base64} 
+                          alt="Report image" 
+                          fill
+                          className="object-cover"
+                        />
                       </div>
                     )}
 
