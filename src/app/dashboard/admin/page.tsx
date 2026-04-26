@@ -80,9 +80,9 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-background text-foreground p-6 flex flex-col items-center relative overflow-hidden">
       
       {/* Background Effects */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
         <div className="absolute top-[-10%] right-[10%] w-[40%] h-[40%] rounded-full bg-rose-500/10 blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] rounded-full bg-emerald-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10vh] left-[-10vw] w-[30%] h-[30%] rounded-full bg-emerald-500/10 blur-[120px]" />
       </div>
 
       <div className="w-full max-w-7xl flex flex-col gap-6 z-10">

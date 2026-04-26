@@ -34,7 +34,7 @@ export default function VolunteerDashboard() {
     if (profile.status === 'revoked') {
       return (
         <div className="min-h-screen bg-background flex items-center justify-center flex-col p-4 relative overflow-hidden">
-          <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-rose-500/10 blur-[150px]" />
           </div>
           <Card className="bg-card/60 backdrop-blur-xl border-destructive/20 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300 z-10 max-w-lg w-full text-center py-10 px-6">
@@ -49,7 +49,7 @@ export default function VolunteerDashboard() {
     if (profile.status === 'ai_rejected') {
       return (
         <div className="min-h-screen bg-background flex items-center justify-center flex-col p-4 relative overflow-hidden">
-          <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-orange-500/10 blur-[150px]" />
           </div>
           <Card className="bg-card/60 backdrop-blur-xl border-destructive/20 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300 z-10 max-w-lg w-full text-center py-10 px-6">
@@ -66,7 +66,7 @@ export default function VolunteerDashboard() {
 
     return (
       <div className="min-h-screen bg-background flex items-center justify-center flex-col p-4 relative overflow-hidden">
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-amber-500/10 blur-[150px]" />
         </div>
         <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300 z-10 max-w-lg w-full text-center py-10 px-6">
@@ -82,9 +82,9 @@ export default function VolunteerDashboard() {
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden p-6">
       
       {/* Background Effects */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
         <div className="absolute top-[-10%] right-[10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] rounded-full bg-primary/5 blur-[120px]" />
+        <div className="absolute bottom-[-10vh] left-[-10vw] w-[30%] h-[30%] rounded-full bg-primary/5 blur-[120px]" />
       </div>
 
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 z-10">

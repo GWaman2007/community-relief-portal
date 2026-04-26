@@ -44,9 +44,9 @@ export default function LoginPage() {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
       
       {/* Background Effects */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/10 blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px]" />
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="absolute top-[-10vh] right-[-10vw] w-[50vw] h-[50vh] rounded-full bg-emerald-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10vh] left-[-10vw] w-[40vw] h-[40vh] rounded-full bg-cyan-500/10 blur-[120px]" />
       </div>
 
       <div className="z-20 absolute top-6 left-6">

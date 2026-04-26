@@ -9,11 +9,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
 
-      {/* Background Effects - pure CSS, zero JS */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-500/10 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/10 blur-[120px]" />
-        <div className="absolute top-[40%] left-[50%] translate-x-[-50%] w-[60%] h-[20%] rounded-full bg-primary/5 blur-[100px]" />
+      {/* Background Effects - fixed position so page height changes don't cause CLS */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="absolute top-[-10vh] left-[-10vw] w-[40vw] h-[40vh] rounded-full bg-emerald-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-10vh] right-[-10vw] w-[40vw] h-[40vh] rounded-full bg-cyan-500/10 blur-[120px]" />
+        <div className="absolute top-[40vh] left-[50vw] translate-x-[-50%] w-[60vw] h-[20vh] rounded-full bg-primary/5 blur-[100px]" />
       </div>
 
       {/* Navigation Bar */}
