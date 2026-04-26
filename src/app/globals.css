@@ -123,15 +123,13 @@
 }
 
 /* ===== PERFORMANCE: GPU-composited hero animation ===== */
-/* Uses ONLY transform + opacity (compositor-friendly properties) */
-/* This replaces the framer-motion JS animation for the LCP element */
-@keyframes fadeSlideUp {
+/* Uses ONLY transform (compositor-friendly). Opacity is NOT animated */
+/* so the LCP <h1> renders at full visibility on first paint frame. */
+@keyframes slideUp {
   from {
-    opacity: 0;
     transform: translateY(30px);
   }
   to {
-    opacity: 1;
     transform: translateY(0);
   }
 }

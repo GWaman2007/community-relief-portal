@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 
 const MapComponent = dynamic(() => import("./MapComponent"), { 
@@ -18,14 +18,30 @@ function MapFallback() {
 }
 
 export default function DelayedMap({ filterCategory = "All" }: { filterCategory?: string }) {
-  const [ready, setReady] = useState(false);
+  const [inView, setInView] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setReady(true), 1500);
-    return () => clearTimeout(timer);
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect(); // Only need to trigger once
+        }
+      },
+      { rootMargin: "200px" } // Start loading 200px before it enters viewport
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
-  if (!ready) return <MapFallback />;
-
-  return <MapComponent filterCategory={filterCategory} />;
+  return (
+    <div ref={sentinelRef} className="w-full h-full">
+      {inView ? <MapComponent filterCategory={filterCategory} /> : <MapFallback />}
+    </div>
+  );
 }

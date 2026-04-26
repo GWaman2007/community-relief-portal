@@ -1,13 +1,21 @@
 "use client";
 
-import { Suspense, lazy } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ShieldAlert, ArrowRight, Activity, Users, MapPin, DatabaseZap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-// Lazy-load ALL below-the-fold sections to reduce initial JS bundle & TBT
-const BelowTheFold = lazy(() => import("@/app/components/BelowTheFold"));
+// Load below-the-fold with ssr:false so the server skips it entirely
+const BelowTheFold = dynamic(() => import("@/app/components/BelowTheFold"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full flex flex-col items-center justify-center py-20">
+      <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
+      <p className="text-muted-foreground text-xs font-medium animate-pulse tracking-widest uppercase">Loading content...</p>
+    </div>
+  )
+});
 
 export default function Home() {
   return (
@@ -48,7 +56,7 @@ export default function Home() {
           {/* CRITICAL LCP SECTION — Pure CSS animations, no JS dependency */}
           {/* Uses CSS @keyframes for fade-in so h1 renders immediately without waiting for framer-motion JS */}
           <div
-            className="text-center mb-24 flex flex-col items-center animate-[fadeSlideUp_0.6s_ease-out_both]"
+            className="text-center mb-24 flex flex-col items-center animate-[slideUp_0.6s_ease-out_both]"
           >
             {/* Visual Anchor: Icon-driven Network Abstraction */}
             <div className="relative w-48 h-48 mb-10 flex items-center justify-center">
@@ -103,15 +111,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* BELOW THE FOLD — Lazy loaded to reduce initial JS bundle */}
-          <Suspense fallback={
-            <div className="w-full flex flex-col items-center justify-center py-20">
-              <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
-              <p className="text-muted-foreground text-xs font-medium animate-pulse tracking-widest uppercase">Loading content...</p>
-            </div>
-          }>
-            <BelowTheFold />
-          </Suspense>
+          {/* BELOW THE FOLD — next/dynamic ssr:false, server skips rendering */}
+          <BelowTheFold />
 
         </div>
       </main>
