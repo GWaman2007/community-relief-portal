@@ -30,14 +30,13 @@ const SEMANTIC_NODES = [
 
 export default function DashboardPage() {
   const [filterCategory, setFilterCategory] = useState("All");
-  const [filterNode, setFilterNode] = useState("All");
 
   return (
     <div className="h-screen w-screen bg-background relative overflow-hidden flex flex-col font-sans">
       
       {/* Absolute Full-Screen Map */}
       <div className="absolute inset-0 z-0">
-         <MapComponent filterNode={filterNode} />
+         <MapComponent filterCategory={filterCategory} />
       </div>
 
       {/* Floating Header */}

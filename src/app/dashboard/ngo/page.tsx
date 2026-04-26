@@ -104,7 +104,7 @@ export default function NgoDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 flex-1 relative min-h-[500px]">
-              <MapComponent filterNode="All" />
+              <MapComponent filterCategory="All" />
             </CardContent>
           </Card>
           

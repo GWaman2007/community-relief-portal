@@ -124,8 +124,8 @@ export default function VolunteerDashboard() {
                </CardTitle>
              </CardHeader>
              <CardContent className="p-0 flex-1 relative min-h-[400px]">
-               <MapComponent filterNode="All" />
-             </CardContent>
+                <MapComponent filterCategory="All" />
+              </CardContent>
            </Card>
            
            <Card className="bg-card/60 backdrop-blur-xl border-border/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col items-center justify-center text-center p-8">

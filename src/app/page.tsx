@@ -197,7 +197,7 @@ export default function Home() {
                 <div className="h-[600px] w-full relative">
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10 pointer-events-none z-10" />
                   {/* DO NOT TOUCH MAP COMPONENT EXISTING LOGIC */}
-                  <MapComponent filterNode="All" />
+                  <MapComponent filterCategory="All" />
                 </div>
               </CardContent>
             </Card>

@@ -25,7 +25,7 @@ const getIcon = (status: string) => {
   return criticalIcon;
 };
 
-export default function MapComponent({ filterCategory = "All", filterNode }: { filterCategory?: string; filterNode?: string }) {
+export default function MapComponent({ filterCategory = "All" }: { filterCategory?: string }) {
   const [reports, setReports] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -43,8 +43,7 @@ export default function MapComponent({ filterCategory = "All", filterNode }: { f
         .select("*, notifications(*), ngos(is_authorized)")
         .order("created_at", { ascending: false });
 
-      // Support both prop names for backward compatibility
-      const filter = filterNode || filterCategory;
+      const filter = filterCategory;
       if (filter && filter !== "All") {
         query = query.eq("semantic_node", filter);
       }
@@ -66,7 +65,7 @@ export default function MapComponent({ filterCategory = "All", filterNode }: { f
       supabase.removeChannel(channel1);
       supabase.removeChannel(channel2);
     };
-  }, [filterCategory, filterNode]);
+  }, [filterCategory]);
 
   const handleDispatch = async (report: any) => {
     try {

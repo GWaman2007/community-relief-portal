@@ -34,7 +34,7 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [ngos, setNgos] = useState<any[]>([]);
   const [volunteers, setVolunteers] = useState<any[]>([]);
-  const [filterNode, setFilterNode] = useState("All");
+  const [filterCategory, setFilterCategory] = useState("All");
 
   useEffect(() => {
     let volChannel: any;
@@ -118,8 +118,8 @@ export default function AdminDashboard() {
             <CardHeader className="pb-4 flex flex-row items-center justify-between border-b border-border/50 bg-background/50">
               <CardTitle className="text-primary">Live Global Heatmap</CardTitle>
               <select 
-                value={filterNode} 
-                onChange={(e) => setFilterNode(e.target.value)}
+                 value={filterCategory} 
+                 onChange={(e) => setFilterCategory(e.target.value)}
                 className="bg-background text-foreground border border-border/50 rounded-lg px-3 py-1.5 text-xs font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
               >
                 {SEMANTIC_NODES.map(node => (
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
                 <LiveMetricsHUD />
               </div>
               <div className="flex-1 relative min-h-[500px]">
-                <MapComponent filterNode={filterNode} />
+                <MapComponent filterCategory={filterCategory} />
               </div>
             </CardContent>
           </Card>
