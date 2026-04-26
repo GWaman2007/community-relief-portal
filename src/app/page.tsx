@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { m, LazyMotion, domAnimation } from "framer-motion";
@@ -9,15 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const MapComponent = dynamic(() => import("@/app/dashboard/MapComponent"), { 
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center bg-card/40 rounded-xl">
-      <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
-      <p className="text-muted-foreground text-sm font-medium animate-pulse tracking-widest uppercase">Initializing Map...</p>
-    </div>
-  )
-});
+import DelayedMap from "@/app/dashboard/DelayedMap";
 
 export default function Home() {
   return (
@@ -195,11 +188,11 @@ export default function Home() {
                 <div className="p-6 border-b border-border/40 bg-background/40">
                   <LiveMetricsHUD />
                 </div>
-                <div className="h-[600px] w-full relative">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10 pointer-events-none z-10" />
-                  {/* DO NOT TOUCH MAP COMPONENT EXISTING LOGIC */}
-                  <MapComponent filterCategory="All" />
-                </div>
+                    <div className="h-[600px] w-full relative">
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10 pointer-events-none z-10" />
+                      {/* DO NOT TOUCH MAP COMPONENT EXISTING LOGIC */}
+                      <DelayedMap filterCategory="All" />
+                    </div>
               </CardContent>
             </Card>
           </m.div>

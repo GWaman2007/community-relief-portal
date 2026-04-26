@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -8,15 +8,7 @@ import { ArrowLeft, Map as MapIcon, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-const MapComponent = dynamic(() => import("./MapComponent"), { 
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center bg-card/40 rounded-xl">
-      <div className="w-12 h-12 rounded-full bg-primary/20 animate-ping mb-4"></div>
-      <p className="text-muted-foreground text-sm font-medium animate-pulse tracking-widest uppercase">Initializing Map...</p>
-    </div>
-  )
-});
+import DelayedMap from "./DelayedMap";
 
 const SEMANTIC_NODES = [
   "All",
@@ -36,7 +28,7 @@ export default function DashboardPage() {
       
       {/* Absolute Full-Screen Map */}
       <div className="absolute inset-0 z-0">
-         <MapComponent filterCategory={filterCategory} />
+         <DelayedMap filterCategory={filterCategory} />
       </div>
 
       {/* Floating Header */}
