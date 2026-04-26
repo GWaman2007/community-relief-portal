@@ -121,3 +121,24 @@
   top: 10px !important;
   right: 10px !important;
 }
+
+/* Marker Cluster High Contrast Overrides */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: rgba(43, 161, 140, 0.4) !important;
+}
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  font-weight: 900 !important;
+  font-family: var(--font-sans) !important;
+  border: 2px solid var(--card) !important;
+  border-radius: 50%;
+}
+.marker-cluster span {
+  color: var(--primary-foreground) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
