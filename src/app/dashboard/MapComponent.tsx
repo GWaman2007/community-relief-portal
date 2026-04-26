@@ -113,7 +113,16 @@ export default function MapComponent({ filterCategory = "All" }: { filterCategor
     <div className="w-full h-full relative z-0">
       <MapContainer center={[19.0760, 72.8777]} zoom={10} attributionControl={false} style={{ height: "100%", width: "100%" }} className="bg-background rounded-lg">
         <TileLayer url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png" />
-        <MarkerClusterGroup chunkedLoading>
+        <MarkerClusterGroup 
+          chunkedLoading
+          iconCreateFunction={(cluster: any) => {
+            return L.divIcon({
+              html: `<span class="text-primary font-bold text-xl drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]">${cluster.getChildCount()}</span>`,
+              className: 'bg-transparent border-none shadow-none flex items-center justify-center',
+              iconSize: L.point(40, 40)
+            });
+          }}
+        >
           {reports.map(report => {
             const total_dispatched = report.notifications?.length || 0;
             const total_accepted = report.notifications?.filter((n: any) => n.status === 'accept').length || 0;
