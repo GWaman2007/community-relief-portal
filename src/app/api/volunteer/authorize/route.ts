@@ -9,6 +9,36 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
 );
 
+// Helper: fetch with timeout + automatic retry
+async function fetchWithRetry(url: string, options: RequestInit, retries = 2, timeoutMs = 25000): Promise<Response> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timer);
+
+      // Retry on 503 (overloaded) or 429 (rate limit)
+      if ((res.status === 503 || res.status === 429) && attempt < retries) {
+        const backoff = (attempt + 1) * 2000;
+        await new Promise(r => setTimeout(r, backoff));
+        continue;
+      }
+      return res;
+    } catch (err: any) {
+      clearTimeout(timer);
+      if (attempt < retries) {
+        const backoff = (attempt + 1) * 2000;
+        await new Promise(r => setTimeout(r, backoff));
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error("All retry attempts exhausted");
+}
+
 export async function POST(req: Request) {
   try {
     const { id, name, skills } = await req.json();
@@ -59,13 +89,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Gemini Key missing" }, { status: 500 });
     }
 
-    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${apiKey}`;
+    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     let is_authorized = false;
     let rejection_reason = "System Error: AI evaluation timed out or failed. Manual review required.";
 
     try {
-      const aiReq = await fetch(baseUrl, {
+      const aiReq = await fetchWithRetry(baseUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -74,9 +104,22 @@ export async function POST(req: Request) {
         })
       });
 
+      if (!aiReq.ok) {
+        const errBody = await aiReq.text();
+        console.error("Gemini API HTTP error:", aiReq.status, errBody);
+        throw new Error(`Gemini returned ${aiReq.status}`);
+      }
+
       const aiData = await aiReq.json();
-      const rawText = aiData.candidates[0].content.parts[0].text;
-      const parsed = JSON.parse(rawText);
+      const rawText = aiData.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!rawText) {
+        console.error("Gemini returned empty response:", JSON.stringify(aiData));
+        throw new Error("Empty AI response");
+      }
+
+      const cleaned = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+      const parsed = JSON.parse(cleaned);
 
       is_authorized = parsed.authorized;
       rejection_reason = parsed.reason || "";

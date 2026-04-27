@@ -41,16 +41,21 @@ export async function POST(req: Request) {
       try {
         console.log("Triggering AI Gatekeeper for volunteer:", data[0].id);
 
-        // The magic 'await' that stops the silent Vercel timeout
+        // Abort after 30s to prevent infinite hangs
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 30000);
+
         await fetch(`${originStr}/api/volunteer/authorize`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: data[0].id, name: data[0].name, skills: data[0].skills })
+          body: JSON.stringify({ id: data[0].id, name: data[0].name, skills: data[0].skills }),
+          signal: controller.signal
         });
 
+        clearTimeout(timer);
         console.log("AI Gatekeeper finished processing.");
       } catch (e) {
-        console.error("AI Gatekeeper pipeline failed", e);
+        console.error("AI Gatekeeper pipeline failed or timed out:", e);
         // We log the error, but don't crash the request. 
         // The volunteer is safe in the DB as 'pending' for manual review.
       }

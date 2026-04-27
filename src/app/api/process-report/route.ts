@@ -8,6 +8,37 @@ const supabase = createClient(
 );
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+const GEMINI_MODEL = "gemini-2.5-flash-lite";
+
+// Helper: fetch with timeout + automatic retry
+async function fetchWithRetry(url: string, options: RequestInit, retries = 2, timeoutMs = 25000): Promise<Response> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timer);
+
+      // Retry on 503 (overloaded) or 429 (rate limit)
+      if ((res.status === 503 || res.status === 429) && attempt < retries) {
+        const backoff = (attempt + 1) * 2000;
+        await new Promise(r => setTimeout(r, backoff));
+        continue;
+      }
+      return res;
+    } catch (err: any) {
+      clearTimeout(timer);
+      if (attempt < retries) {
+        const backoff = (attempt + 1) * 2000;
+        await new Promise(r => setTimeout(r, backoff));
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error("All retry attempts exhausted");
+}
 
 export async function POST(req: Request) {
   try {
@@ -25,6 +56,8 @@ export async function POST(req: Request) {
     if (!text || !latitude || !longitude) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
     // Smart Classification Pipeline
     if (image_base64) {
@@ -53,24 +86,30 @@ export async function POST(req: Request) {
           generationConfig: { responseMimeType: "application/json" }
         };
 
-        const gkRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${GEMINI_API_KEY}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(gkPayload)
-        });
+        try {
+          const gkRes = await fetchWithRetry(geminiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(gkPayload)
+          });
 
-        if (gkRes.ok) {
-          const gkData = await gkRes.json();
-          let gkRaw = gkData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-          gkRaw = gkRaw.replace(/```json/g, "").replace(/```/g, "").trim();
-          try {
-            const analysis = JSON.parse(gkRaw);
-            if (analysis.is_valid === false) {
-              return NextResponse.json({ error: `Classification Failed: ${analysis.rejection_reason || "Junk image detected."}` }, { status: 400 });
+          if (gkRes.ok) {
+            const gkData = await gkRes.json();
+            let gkRaw = gkData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+            gkRaw = gkRaw.replace(/```json/g, "").replace(/```/g, "").trim();
+            try {
+              const analysis = JSON.parse(gkRaw);
+              if (analysis.is_valid === false) {
+                return NextResponse.json({ error: `Classification Failed: ${analysis.rejection_reason || "Junk image detected."}` }, { status: 400 });
+              }
+            } catch (e) {
+              console.error("Gatekeeper parse failed", e);
             }
-          } catch (e) {
-            console.error("Gatekeeper parse failed", e);
+          } else {
+            console.error("Gatekeeper API error:", gkRes.status, await gkRes.text());
           }
+        } catch (e) {
+          console.error("Gatekeeper fetch failed (proceeding without image validation):", e);
         }
       }
     }
@@ -138,7 +177,7 @@ Rules:
       }
     };
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${GEMINI_API_KEY}`, {
+    const res = await fetchWithRetry(geminiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(geminiPayload)
