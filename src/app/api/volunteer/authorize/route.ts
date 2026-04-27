@@ -89,25 +89,41 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Gemini Key missing" }, { status: 500 });
     }
 
-    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+    // Fallback model chain — if primary is 503, try the next
+    const MODELS = ["gemini-3.1-flash-lite-preview", "gemini-2.5-flash"];
+    const requestBody = JSON.stringify({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { responseMimeType: "application/json" }
+    });
 
     let is_authorized = false;
     let rejection_reason = "System Error: AI evaluation timed out or failed. Manual review required.";
 
     try {
-      const aiReq = await fetchWithRetry(baseUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json" }
-        })
-      });
+      let aiReq: Response | null = null;
 
-      if (!aiReq.ok) {
-        const errBody = await aiReq.text();
-        console.error("Gemini API HTTP error:", aiReq.status, errBody);
-        throw new Error(`Gemini returned ${aiReq.status}`);
+      for (const model of MODELS) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        try {
+          aiReq = await fetchWithRetry(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: requestBody
+          });
+          if (aiReq.ok) {
+            console.log(`AI Gatekeeper succeeded with model: ${model}`);
+            break;
+          }
+          console.warn(`Model ${model} returned ${aiReq.status}, trying next...`);
+        } catch (e) {
+          console.warn(`Model ${model} failed, trying next...`, e);
+        }
+      }
+
+      if (!aiReq || !aiReq.ok) {
+        const errBody = aiReq ? await aiReq.text() : "All models failed";
+        console.error("All Gemini models failed:", errBody);
+        throw new Error("All Gemini models unavailable");
       }
 
       const aiData = await aiReq.json();

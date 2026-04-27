@@ -8,7 +8,7 @@ const supabase = createClient(
 );
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_MODEL = "gemini-2.5-flash-lite";
+const GEMINI_MODELS = ["gemini-3.1-flash-lite-preview", "gemini-2.5-flash"];
 
 // Helper: fetch with timeout + automatic retry
 async function fetchWithRetry(url: string, options: RequestInit, retries = 2, timeoutMs = 25000): Promise<Response> {
@@ -57,7 +57,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+    // Helper: try models in fallback order
+    async function callGemini(payload: object): Promise<Response> {
+      let lastRes: Response | null = null;
+      for (const model of GEMINI_MODELS) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+        try {
+          lastRes = await fetchWithRetry(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (lastRes.ok) return lastRes;
+          console.warn(`Model ${model} returned ${lastRes.status}, trying next...`);
+        } catch (e) {
+          console.warn(`Model ${model} failed, trying next...`, e);
+        }
+      }
+      return lastRes || new Response("All models failed", { status: 503 });
+    }
 
     // Smart Classification Pipeline
     if (image_base64) {
@@ -87,11 +105,7 @@ export async function POST(req: Request) {
         };
 
         try {
-          const gkRes = await fetchWithRetry(geminiUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(gkPayload)
-          });
+          const gkRes = await callGemini(gkPayload);
 
           if (gkRes.ok) {
             const gkData = await gkRes.json();
@@ -177,11 +191,7 @@ Rules:
       }
     };
 
-    const res = await fetchWithRetry(geminiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(geminiPayload)
-    });
+    const res = await callGemini(geminiPayload);
 
     const geminiData = await res.json();
     if (!res.ok) {
