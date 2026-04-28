@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 
 export const maxDuration = 60;
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder_key"
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
 );
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
@@ -69,9 +69,7 @@ export async function POST(req: Request) {
             body: JSON.stringify(payload)
           });
           if (lastRes.ok) return lastRes;
-          console.warn(`Model ${model} returned ${lastRes.status}, trying next...`);
         } catch (e) {
-          console.warn(`Model ${model} failed, trying next...`, e);
         }
       }
       return lastRes || new Response("All models failed", { status: 503 });
@@ -117,13 +115,10 @@ export async function POST(req: Request) {
                 return NextResponse.json({ error: `Classification Failed: ${analysis.rejection_reason || "Junk image detected."}` }, { status: 400 });
               }
             } catch (e) {
-              console.error("Gatekeeper parse failed", e);
             }
           } else {
-            console.error("Gatekeeper API error:", gkRes.status, await gkRes.text());
           }
         } catch (e) {
-          console.error("Gatekeeper fetch failed (proceeding without image validation):", e);
         }
       }
     }
@@ -135,7 +130,6 @@ export async function POST(req: Request) {
     });
 
     if (rpcError) {
-      console.error("RPC Error:", rpcError);
       return NextResponse.json({ error: "Failed to fetch nearby reports" }, { status: 500 });
     }
 
@@ -195,7 +189,6 @@ Rules:
 
     const geminiData = await res.json();
     if (!res.ok) {
-      console.error("Gemini API Error:", geminiData);
       return NextResponse.json({ error: "AI Processing Failed" }, { status: 500 });
     }
 
@@ -208,7 +201,6 @@ Rules:
     try {
       analysis = JSON.parse(rawText);
     } catch (e) {
-      console.error("Failed to parse Gemini JSON:", rawText);
       return NextResponse.json({ error: "Invalid AI Output" }, { status: 500 });
     }
 
@@ -232,7 +224,6 @@ Rules:
           .eq("id", analysis.parent_id);
 
         if (updateError) {
-          console.error("Supabase Update Error:", updateError);
           return NextResponse.json({ error: "Failed to update parent report" }, { status: 500 });
         }
 
@@ -261,14 +252,12 @@ Rules:
       .select();
 
     if (insertError) {
-      console.error("Supabase Insert Error:", insertError);
       return NextResponse.json({ error: "Failed to insert new report" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, action: "inserted_new", data: newReport });
 
   } catch (error: any) {
-    console.error("Server Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

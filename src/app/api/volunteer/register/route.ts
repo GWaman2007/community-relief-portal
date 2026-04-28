@@ -30,7 +30,6 @@ export async function POST(req: Request) {
       .select();
 
     if (error) {
-      console.error("Supabase Insert Error:", error);
       return NextResponse.json({ error: "Failed to register volunteer" }, { status: 500 });
     }
 
@@ -39,7 +38,6 @@ export async function POST(req: Request) {
       const originStr = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
       try {
-        console.log("Triggering AI Gatekeeper for volunteer:", data[0].id);
 
         // Abort after 30s to prevent infinite hangs
         const controller = new AbortController();
@@ -53,9 +51,7 @@ export async function POST(req: Request) {
         });
 
         clearTimeout(timer);
-        console.log("AI Gatekeeper finished processing.");
       } catch (e) {
-        console.error("AI Gatekeeper pipeline failed or timed out:", e);
         // We log the error, but don't crash the request. 
         // The volunteer is safe in the DB as 'pending' for manual review.
       }
@@ -65,7 +61,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, volunteer: data[0] });
 
   } catch (error: any) {
-    console.error("Internal Server Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
   }
 }

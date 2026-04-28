@@ -27,7 +27,6 @@ export async function POST(req: Request) {
 
     const { error } = await supabase.from(table).update(payload).eq("id", id);
     if (error) {
-      console.error("TOGGLE DB ERROR:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
     
